@@ -3,61 +3,70 @@
 #include "ui/FrameDrawer.h"
 #include <iostream>
 
-static std::string colorOf(char tile) {
+static constexpr std::string_view colorOf(char tile) {
     switch (tile) {
-    case '.': return "\033[38;5;242m";  // земля
-    case ',': return "\033[38;5;34m";   // трава
-    case '~': return "\033[38;5;31m";   // вода
-    case '#': return "\033[38;5;250m";  // стена
-    case 'N': return "\033[1;33m";      // npc
-    case 'I': return "\033[1;36m";      // item
-    default:  return "\033[0m";
+        case '.': return "\033[38;5;242m";
+        case ',': return "\033[38;5;34m";
+        case '~': return "\033[38;5;31m";
+        case '#': return "\033[38;5;250m";
+        case 'N': return "\033[1;33m";
+        case 'I': return "\033[1;36m";
+        default:  return "\033[0m";
     }
 }
 
-void MapRenderer::draw(const Model& model, int row, int col, int radius) {
-    int diameter = radius * 2 + 1;
+MapRenderer::MapRenderer(const Model& model) : model(model) { }
 
-    int frameHeight = diameter + 2;
-    int frameWidth  = diameter + 2;
+void MapRenderer::draw(int row, int col, int radiusY, int radiusX) const {
+    int height = radiusY * 2 + 1;
+    int width  = radiusX * 2 + 1;
 
-    FrameDrawer::drawFrame(row, col, frameHeight, frameWidth);
-
-    drawAreaAroundPlayer(model, row + 1, col + 1, radius);
+    FrameDrawer::drawFrame(row, col, height + 2, width + 2);
+    drawAreaAroundPlayer(row + 1, col + 1, radiusY, radiusX);
 }
 
-void MapRenderer::drawAreaAroundPlayer(const Model& model, int row, int col, int radius) {
+void MapRenderer::draw(int row, int col, int radius) const {
+    draw(row, col, radius, radius);
+}
+
+void MapRenderer::drawAreaAroundPlayer(int row, int col,
+                                      int radiusY, int radiusX) const {
+    for (int dy = -radiusY; dy <= radiusY; dy++) {
+        for (int dx = -radiusX; dx <= radiusX; dx++) {
+            drawTile(row, col, radiusY, radiusX, dy, dx);
+        }
+    }
+}
+
+void MapRenderer::drawTile(int row,     int col,
+                           int radiusY, int radiusX,
+                           int dy,      int dx) const {
     const auto& map = model.getMap();
     const auto& p   = model.getPlayer();
 
-    for (int dy = -radius; dy <= radius; dy++) {
-        for (int dx = -radius; dx <= radius; dx++) {
+    int checkY = static_cast<int>(p.y) + dy;
+    int checkX = static_cast<int>(p.x) + dx;
 
-            // ПРАВИЛЬНО: проверяем ДО преобразования в size_t
-            int checkY = static_cast<int>(p.y) + dy;
-            int checkX = static_cast<int>(p.x) + dx;
+    TerminalUtils::moveCursor(row + (dy + radiusY), col + (dx + radiusX));
 
-            TerminalUtils::moveCursor(row + (dy + radius), col + (dx + radius));
-
-            // Проверяем ВСЕ границы:
-            if (checkY < 0 || checkX < 0 ||
-                checkY >= static_cast<int>(model.getMapSizeY()) ||
-                checkX >= static_cast<int>(model.getMapSizeX(p.y))) {
-                std::cout << " ";
-                continue;
-                }
-
-            // Теперь безопасно преобразуем:
-            auto y = static_cast<size_t>(checkY);
-            auto x = static_cast<size_t>(checkX);
-
-            if (y == p.y && x == p.x) {
-                std::cout << "\033[1;32m@\033[0m";
-                continue;
-            }
-
-            char tile = map[y][x];
-            std::cout << colorOf(tile) << tile << "\033[0m";
-        }
+    if (!isValidPosition(checkY, checkX)) {
+        std::cout << " ";
+        return;
     }
+
+    auto y = static_cast<size_t>(checkY);
+    auto x = static_cast<size_t>(checkX);
+
+    if (y == p.y && x == p.x) {
+        std::cout << "\033[1;32m@\033[0m";
+        return;
+    }
+
+    std::cout << colorOf(map[y][x]) << map[y][x] << "\033[0m";
+}
+
+bool MapRenderer::isValidPosition(int y, int x) const {
+    return y >= 0 && x >= 0 &&
+           y < static_cast<int>(model.getMapSizeY()) &&
+           x < static_cast<int>(model.getMapSizeX(static_cast<size_t>(y)));
 }

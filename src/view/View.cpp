@@ -5,13 +5,12 @@
 #include "ui/MapRenderer.h"
 #include <iostream>
 
-View::View(const Model& m) : model(m) {}
+View::View(const Model& m) : model(m), mapRenderer(m) {}
 
 View::~View() {
     TerminalUtils::clearScreen();
     TerminalUtils::showCursor();
 }
-
 
 void View::draw() const {
     int rows, cols;
@@ -23,10 +22,10 @@ void View::draw() const {
     StatusPanel::draw(model, 1, 1, 30);
 
     // Центр
-    ActionPanel::draw(1, cols/2 - 15, 40);
+    ActionPanel::draw(1, cols/2 - 20, 40);
 
     // Правая карта
-    MapRenderer::draw(model, 1, cols - 15, 5);
+    mapRenderer.draw(1, cols - 22, 4, 10);
 
     TerminalUtils::hideCursor();
     std::cout.flush();
