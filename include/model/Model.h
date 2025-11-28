@@ -5,11 +5,11 @@
 class Model {
 public:
     struct Player {
-        int x;
-        int y;
+        size_t x, y;
         int hp = 100;
         std::string status = "Тестовый";
     };
+
 
 private:
     Player player;
@@ -20,8 +20,12 @@ private:
 public:
     Model();
 
-    const Player& getPlayer() const;
-    const std::vector<std::string>& getMap() const;
+    [[nodiscard]] const Player& getPlayer() const;
+    [[nodiscard]] const std::vector<std::string>& getMap() const;
+
+    [[nodiscard]] size_t getMapSizeY() const;
+    [[nodiscard]] size_t getMapSizeX() const;
+    [[nodiscard]] size_t getMapSizeX(size_t y) const;
 
     void moveUp();
     void moveDown();
