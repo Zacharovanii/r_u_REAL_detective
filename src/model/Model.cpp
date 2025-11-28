@@ -1,30 +1,25 @@
 #include "model/Model.h"
+#include "model/MapLoader.h"
+#include <stdexcept>
 
 Model::Model() {
-    map = std::vector<std::string>(rows, std::string(cols, '.'));
+    map = MapLoader::load("data/maps/hotel_1f.map");
 
-    // Сгенерируем зоны травы
-    for (int y = 0; y < rows; y++) {
-        for (int x = 0; x < cols; x++) {
+    if (map.empty())
+        throw std::runtime_error("Loaded map is empty!");
 
-            int r = rand() % 100;
-
-            if (r < 55) map[y][x] = '.';        // земля
-            else if (r < 80) map[y][x] = ',';   // трава
-            else if (r < 90) map[y][x] = '~';   // вода
-            else map[y][x] = '#';               // камень/дом
+    // Игрок появляется в первой доступной точке (.)
+    for (int y = 0; y < map.size(); y++) {
+        for (int x = 0; x < map[y].size(); x++) {
+            if (map[y][x] == '.') {
+                player = { x, y };
+                return;
+            }
         }
     }
 
-    // NPC
-    map[4][6] = 'N';
-    map[2][10] = 'N';
-
-    // Items
-    map[6][3] = 'I';
-    map[8][8] = 'I';
-
-    player = {2, 2};
+    // Fallback
+    player = { 1, 1 };
 }
 
 const Model::Player& Model::getPlayer() const {
@@ -36,17 +31,21 @@ const std::vector<std::string>& Model::getMap() const {
 }
 
 void Model::moveUp() {
-    if (player.y > 0) player.y--;
+    if (player.y > 0 && map[player.y - 1][player.x] != '#')
+        player.y--;
 }
 
 void Model::moveDown() {
-    if (player.y < rows - 1) player.y++;
+    if (player.y < map.size() - 1 && map[player.y + 1][player.x] != '#')
+        player.y++;
 }
 
 void Model::moveLeft() {
-    if (player.x > 0) player.x--;
+    if (player.x > 0 && map[player.y][player.x - 1] != '#')
+        player.x--;
 }
 
 void Model::moveRight() {
-    if (player.x < cols - 1) player.x++;
+    if (player.x < map[0].size() - 1 && map[player.y][player.x + 1] != '#')
+        player.x++;
 }

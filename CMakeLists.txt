@@ -9,6 +9,8 @@ file(GLOB_RECURSE GAME_SOURCES
         "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
 
+file(COPY data DESTINATION ${CMAKE_BINARY_DIR})
+
 # ---- Создаём библиотеку с реализацией игры ----
 add_library(game_lib ${GAME_SOURCES})
 
@@ -24,3 +26,4 @@ target_compile_options(game_lib PRIVATE
 add_executable(Game main.cpp)
 
 target_link_libraries(Game PRIVATE game_lib)
+
