@@ -33,15 +33,23 @@ void MapRenderer::drawAreaAroundPlayer(const Model& model, int row, int col, int
     for (int dy = -radius; dy <= radius; dy++) {
         for (int dx = -radius; dx <= radius; dx++) {
 
-            int y = p.y + dy;
-            int x = p.x + dx;
+            // ПРАВИЛЬНО: проверяем ДО преобразования в size_t
+            int checkY = static_cast<int>(p.y) + dy;
+            int checkX = static_cast<int>(p.x) + dx;
 
             TerminalUtils::moveCursor(row + (dy + radius), col + (dx + radius));
 
-            if (y < 0 || x < 0 || y >= map.size() || x >= map[0].size()) {
+            // Проверяем ВСЕ границы:
+            if (checkY < 0 || checkX < 0 ||
+                checkY >= static_cast<int>(model.getMapSizeY()) ||
+                checkX >= static_cast<int>(model.getMapSizeX(p.y))) {
                 std::cout << " ";
                 continue;
-            }
+                }
+
+            // Теперь безопасно преобразуем:
+            auto y = static_cast<size_t>(checkY);
+            auto x = static_cast<size_t>(checkX);
 
             if (y == p.y && x == p.x) {
                 std::cout << "\033[1;32m@\033[0m";
