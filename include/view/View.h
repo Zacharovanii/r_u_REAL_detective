@@ -1,13 +1,12 @@
 #pragma once
 #include "model/Model.h"
-#include "ui/MapRenderer.h"
 
 class View {
 public:
-    View(const Model& model);
-    void draw();
+    explicit View(const Model& model);
+    ~View();
+    void draw() const;
 
 private:
     const Model& model;
-    MapRenderer mapRenderer = MapRenderer();
 };

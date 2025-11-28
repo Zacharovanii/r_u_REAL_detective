@@ -7,7 +7,13 @@
 
 View::View(const Model& m) : model(m) {}
 
-void View::draw() {
+View::~View() {
+    TerminalUtils::clearScreen();
+    TerminalUtils::showCursor();
+}
+
+
+void View::draw() const {
     int rows, cols;
     TerminalUtils::getTerminalSize(rows, cols);
 
@@ -20,7 +26,7 @@ void View::draw() {
     ActionPanel::draw(1, cols/2 - 15, 40);
 
     // Правая карта
-    mapRenderer.draw(model, 1, cols - 15, 5);
+    MapRenderer::draw(model, 1, cols - 15, 5);
 
     TerminalUtils::hideCursor();
     std::cout.flush();
