@@ -5,7 +5,10 @@
 #include "ui/MapRenderer.h"
 #include <iostream>
 
-View::View(const Model& m) : model(m), mapRenderer(m) {}
+View::View(const Model& m) : model(m), mapRenderer(m) {
+    TerminalUtils::clearScreen();
+    TerminalUtils::hideCursor();
+}
 
 View::~View() {
     TerminalUtils::clearScreen();
@@ -15,18 +18,22 @@ View::~View() {
 void View::draw() const {
     int rows, cols;
     TerminalUtils::getTerminalSize(rows, cols);
-
     TerminalUtils::clearScreen();
 
-    // Левая панель
-    StatusPanel::draw(model, 1, 1, 30);
+    // Ширины панелей (можно вынести в константы класса)
+    constexpr int LEFT_WIDTH = 30;    // Статус-панель
+    constexpr int RIGHT_WIDTH = 22;   // Карта
+    constexpr int CENTER_WIDTH = 40;  // Действия
 
-    // Центр
-    ActionPanel::draw(1, cols/2 - 20, 40);
+    // Позиции
+    constexpr int leftCol = 1;                            // Слева
+    const int rightCol = cols - RIGHT_WIDTH;          // Справа
+    const int centerCol = cols / 2 - CENTER_WIDTH / 3 - 1;  // По центру
 
-    // Правая карта
-    mapRenderer.draw(1, cols - 22, 4, 10);
+    // Отрисовка
+    StatusPanel::draw(model, 1, leftCol, LEFT_WIDTH);
+    ActionPanel::draw(1, centerCol, CENTER_WIDTH);
+    mapRenderer.draw(1, rightCol, 4, 10);
 
-    TerminalUtils::hideCursor();
     std::cout.flush();
 }

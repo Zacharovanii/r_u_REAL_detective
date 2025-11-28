@@ -5,13 +5,14 @@
 
 static constexpr std::string_view colorOf(char tile) {
     switch (tile) {
-        case '.': return "\033[38;5;242m";
-        case ',': return "\033[38;5;34m";
-        case '~': return "\033[38;5;31m";
-        case '#': return "\033[38;5;250m";
-        case 'N': return "\033[1;33m";
-        case 'I': return "\033[1;36m";
-        default:  return "\033[0m";
+        case '.': return "\033[38;5;242m.\033[0m"   ;
+        case ',': return "\033[38;5;34m,\033[0m"    ;
+        case '~': return "\033[38;5;31m~\033[0m"    ;
+        case '#': return "\033[38;5;250m#\033[0m"   ;
+        case 'N': return "\033[1;36;45mN\033[0m"       ;
+        case 'I': return "\033[1;33;40mI\033[0m"       ;
+        case '@': return "\033[1;32m@\033[0m"       ;
+        default:  return "\033[0mZ\033[0m"          ;
     }
 }
 
@@ -58,11 +59,11 @@ void MapRenderer::drawTile(int row,     int col,
     auto x = static_cast<size_t>(checkX);
 
     if (y == p.y && x == p.x) {
-        std::cout << "\033[1;32m@\033[0m";
+        std::cout << colorOf('@');
         return;
     }
 
-    std::cout << colorOf(map[y][x]) << map[y][x] << "\033[0m";
+    std::cout << colorOf(map[y][x]);
 }
 
 bool MapRenderer::isValidPosition(int y, int x) const {
