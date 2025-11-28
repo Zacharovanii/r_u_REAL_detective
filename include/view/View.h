@@ -1,5 +1,6 @@
 #pragma once
 #include "model/Model.h"
+#include "ui/MapRenderer.h"
 
 class View {
 public:
@@ -8,4 +9,5 @@ public:
 
 private:
     const Model& model;
+    MapRenderer mapRenderer = MapRenderer();
 };

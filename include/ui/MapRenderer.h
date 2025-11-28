@@ -3,5 +3,8 @@
 
 class MapRenderer {
 public:
-    static void draw(const Model& model, int row, int col);
+    void draw(const Model& model, int row, int col, int radius = 1);
+
+private:
+    void drawAreaAroundPlayer(const Model& model, int row, int col, int radius);
 };

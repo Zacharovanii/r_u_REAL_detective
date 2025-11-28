@@ -17,10 +17,10 @@ void View::draw() {
     StatusPanel::draw(model, 1, 1, 30);
 
     // Центр
-    ActionPanel::draw(1, cols/2 - 20, 40);
+    ActionPanel::draw(1, cols/2 - 15, 40);
 
     // Правая карта
-    MapRenderer::draw(model, 1, cols - 20);
+    mapRenderer.draw(model, 1, cols - 15, 5);
 
     TerminalUtils::hideCursor();
     std::cout.flush();
