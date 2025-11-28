@@ -1,6 +1,6 @@
 #pragma once
-#include "../model/Model.h"
-#include "../view/View.h"
+#include "model/Model.h"
+#include "view/View.h"
 
 class Controller {
     Model &model;

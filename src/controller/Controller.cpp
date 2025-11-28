@@ -1,4 +1,5 @@
-#include "Controller.h"
+#include "controller/Controller.h"
+#include "ui/TerminalUtils.h"
 #include <termios.h>
 #include <unistd.h>
 #include <iostream>
@@ -28,7 +29,7 @@ void Controller::run() {
     while (true) {
         ch = getchar();
 
-        if (ch == '\033') {view.clearScreen(); break;}
+        if (ch == '\033') {TerminalUtils::clearScreen(); break;}
 
         if (ch == 'w') model.moveUp();
         if (ch == 's') model.moveDown();

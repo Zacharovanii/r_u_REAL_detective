@@ -13,8 +13,8 @@ public:
 
 private:
     Player player;
-    int rows = 5;
-    int cols = 5;
+    int rows = 15;
+    int cols = 15;
     std::vector<std::string> map;
 
 public:

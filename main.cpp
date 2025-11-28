@@ -1,6 +1,6 @@
-#include "src/model/Model.h"
-#include "src/view/View.h"
-#include "src/controller/Controller.h"
+#include "model/Model.h"
+#include "view/View.h"
+#include "controller/Controller.h"
 
 int main() {
     Model model;
