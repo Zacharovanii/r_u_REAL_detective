@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "Types.h"
 
 class MapLoader {
 public:
-    static std::vector<std::string> load(const std::string& path);
+    static MapTiles load(const std::string& path);
+    static MapTiles loadByName(const std::string& name);
 };

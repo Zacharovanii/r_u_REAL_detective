@@ -13,11 +13,11 @@ void StatusPanel::draw(const Model& model, int row, int col, int width) {
     std::cout << "Игрок";
 
     TerminalUtils::moveCursor(row + 2, col + 2);
-    std::cout << "Позиция: (" << p.x << ", " << p.y << ")";
+    std::cout << "Позиция: (" << p.getX() << ", " << p.getY() << ")";
 
     TerminalUtils::moveCursor(row + 3, col + 2);
-    std::cout << "HP: " << p.hp;
+    std::cout << "HP: " << "100";
 
     TerminalUtils::moveCursor(row + 4, col + 2);
-    std::cout << "Статус: " << p.status;
+    std::cout << "Статус: " << "Test";
 }

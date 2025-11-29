@@ -5,7 +5,6 @@
 
 static constexpr std::string_view colorOf(char tile) {
     switch (tile) {
-
         // Пол
     case '.': return "\033[38;5;250m·\033[0m";        // Светлая точка пола
     case ',': return "\033[38;5;34m░\033[0m";         // Трава
@@ -72,11 +71,14 @@ void MapRenderer::drawAreaAroundPlayer(int row, int col,
 void MapRenderer::drawTile(int row,     int col,
                            int radiusY, int radiusX,
                            int dy,      int dx) const {
-    const auto& map = model.getMap();
-    const auto& p   = model.getPlayer();
+    const Location* location = model.getCurrentLocation();
+    if (!location) return;
 
-    int checkY = static_cast<int>(p.y) + dy;
-    int checkX = static_cast<int>(p.x) + dx;
+    const auto& p = model.getPlayer();
+    const auto& tiles = location->getTiles();
+
+    int checkY = static_cast<int>(p.getY()) + dy;
+    int checkX = static_cast<int>(p.getX()) + dx;
 
     TerminalUtils::moveCursor(row + (dy + radiusY), col + (dx + radiusX));
 
@@ -88,16 +90,32 @@ void MapRenderer::drawTile(int row,     int col,
     auto y = static_cast<size_t>(checkY);
     auto x = static_cast<size_t>(checkX);
 
-    if (y == p.y && x == p.x) {
+    // Рисуем игрока
+    if (y == p.getY() && x == p.getX()) {
         std::cout << colorOf('@');
         return;
     }
 
-    std::cout << colorOf(map[y][x]);
+    // Проверяем, есть ли дверь на этой позиции
+    if (location->hasDoorAt(x, y)) {
+        const Door* door = location->getDoorAt(x, y);
+        if (door && door->isOpen()) {
+            std::cout << colorOf('D');  // Открытая дверь
+        } else {
+            std::cout << colorOf('#');  // Закрытая дверь (как стена)
+        }
+        return;
+    }
+
+    // Рисуем обычный тайл
+    std::cout << colorOf(tiles[y][x]);
 }
 
 bool MapRenderer::isValidPosition(int y, int x) const {
+    const Location* location = model.getCurrentLocation();
+    if (!location) return false;
+
     return y >= 0 && x >= 0 &&
-           y < static_cast<int>(model.getMapSizeY()) &&
-           x < static_cast<int>(model.getMapSizeX(static_cast<size_t>(y)));
+           y < static_cast<int>(location->getTiles().size()) &&
+           x < static_cast<int>(location->getTiles()[static_cast<size_t>(y)].size());
 }

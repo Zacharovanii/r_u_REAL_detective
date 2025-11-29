@@ -8,7 +8,6 @@ public:
     ~View();
 
     void draw() const;
-    // void drawCompactLayout(int cols) const;
 
 private:
     const Model& model;
