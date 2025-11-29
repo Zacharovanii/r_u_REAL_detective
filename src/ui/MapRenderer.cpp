@@ -9,8 +9,9 @@ static constexpr std::string_view colorOf(char tile) {
         case ',': return "\033[38;5;34m,\033[0m"    ;
         case '~': return "\033[38;5;31m~\033[0m"    ;
         case '#': return "\033[38;5;250m#\033[0m"   ;
-        case 'N': return "\033[1;36;45mN\033[0m"       ;
-        case 'I': return "\033[1;33;40mI\033[0m"       ;
+        case 'N': return "\033[1;36;45mN\033[0m"    ;
+        case 'I': return "\033[1;33;40mI\033[0m"    ;
+        case 'D': return "\033[38;5;130;48;5;94m▓\033[0m"    ;
         case '@': return "\033[1;32m@\033[0m"       ;
         default:  return "\033[0mZ\033[0m"          ;
     }

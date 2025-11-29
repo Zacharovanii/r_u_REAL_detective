@@ -15,10 +15,24 @@ file(GLOB_RECURSE GAME_SOURCES
         "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
 
-file(COPY data DESTINATION ${CMAKE_BINARY_DIR})
+# Копируем data, если исходники изменились
+add_custom_command(
+        OUTPUT ${CMAKE_BINARY_DIR}/data
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/data
+        ${CMAKE_BINARY_DIR}/data
+        DEPENDS ${CMAKE_SOURCE_DIR}/data
+        COMMENT "Copying data files..."
+)
+
+# Создаем цель для копирования
+
 
 # ---- Создаём библиотеку с реализацией игры ----
 add_library(game_lib ${GAME_SOURCES})
+
+add_custom_target(copy_data ALL DEPENDS ${CMAKE_BINARY_DIR}/data)
+add_dependencies(game_lib copy_data)
 
 # Подключаем все include/ директории
 target_include_directories(game_lib PUBLIC ${CMAKE_SOURCE_DIR}/include)
