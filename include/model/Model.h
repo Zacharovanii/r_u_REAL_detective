@@ -3,6 +3,8 @@
 #include <string>
 #include <unordered_map>
 
+using Position = std::pair<size_t, size_t>;
+
 class Model {
 public:
     struct Player {
@@ -12,9 +14,9 @@ public:
     };
 
     struct Door {
-        size_t door_x, door_y;
+        Position from_pos;
         std::string to_map;
-        size_t to_x, to_y;
+        Position to_pos;
         std::string description;
     };
 
@@ -23,7 +25,10 @@ private:
     std::vector<std::string> map;
     std::string current_map = "hotel_1f";
 
-    std::unordered_map<std::string, Door> doors;
+    std::unordered_map<
+        std::string,
+        std::vector<Door>
+    > doors;
 
 public:
     Model();

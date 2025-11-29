@@ -5,20 +5,41 @@
 
 Model::Model() {
     initializeDoors();
-    loadMap();  // Используем понятные имена
+    loadMap();
 }
 
 
 void Model::initializeDoors() {
     doors = {
-        // Отель -> Улица
-        {"hotel_1f", {33, 5, "street", 1, 1, "Выйти на улицу"}},
-        // Улица -> Отель
-        {"street", {1, 3, "hotel_1f", 34, 5, "Войти в отель"}},
-        // Улица -> Полиция
-        // {"street", 15, 8, "police_station", 2, 1, "Полицейский участок"},
-        // Полиция -> Улица
-        // {"police_station", 2, 1, "street", 15, 8, "Выйти на улицу"}
+        {"hotel_1f", {
+            Door{
+            {35, 5},
+            "street",
+            {1, 1},
+            "Выйти на улицу"},
+            Door{
+            {28, 3},
+            "hotel_2f",
+            {23, 8},
+            "Подняться на 2 этаж"}
+        }},
+
+        {"hotel_2f", {
+            Door{
+                {23, 7},
+                "hotel_1f",
+                {28, 4},
+                "Спуститься на 1 этаж"},
+        }},
+
+        {"street", {
+            Door{
+            {1, 3},
+            "hotel_1f",
+            {34, 5},
+            "Войти в отель"},
+        }},
+
     };
 }
 
@@ -41,28 +62,32 @@ void Model::loadMap(const std::string& map_name) {
         throw std::runtime_error("Loaded map is empty: " + filename);
     }
 
-    // Устанавливаем позицию игрока
     auto it = doors.find(current_map);
-    if (!doors.empty()) {
-        player.x = it->second.to_x;
-        player.y = it->second.to_y;
-    } else {
-        player = {1, 1};  // Ultimate fallback
-    }
 
+    for (Door& door : it->second) {
+        if (door.to_map == map_name) {
+            player.x = door.to_pos.first;
+            player.y = door.to_pos.second;
+
+            current_map = map_name;
+            return;
+        }
+    }
+    player = {1, 1};
     current_map = map_name;
 }
 
 bool Model::tryTransition() {
-    size_t door_x = doors[current_map].door_x;
-    size_t door_y = doors[current_map].door_y;
+    for (Door& door : doors[current_map]) {
+        size_t door_x = door.from_pos.first;
+        size_t door_y = door.from_pos.second;
 
-    if (player.x == door_x && player.y == door_y) {
-        loadMap(doors[current_map].to_map);
-        return true;
-    } else {
-        return false;
+        if (player.x == door_x && player.y == door_y) {
+            loadMap(door.to_map);
+            return true;
+        }
     }
+    return false;
 }
 
 const std::string& Model::getCurrentMap() const {
