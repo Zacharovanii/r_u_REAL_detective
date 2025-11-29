@@ -53,6 +53,7 @@ public:
     [[nodiscard]] size_t getMapSizeY() const;
     [[nodiscard]] size_t getMapSizeX() const;
     [[nodiscard]] size_t getMapSizeX(size_t y) const;
+    std::string getCurrentLocationName() const;
 
 private:
     void initializeDoors();

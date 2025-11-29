@@ -90,6 +90,20 @@ bool Model::tryTransition() {
     return false;
 }
 
+std::string Model::getCurrentLocationName() const {
+    static const std::unordered_map<std::string, std::string> locationNames = {
+        {"hotel_1f", "Hotel 1f"},
+        {"hotel_2f", "Hotel 2f"},
+        {"street", "Street"}
+    };
+
+    auto it = locationNames.find(current_map);
+    if (it != locationNames.end()) {
+        return it->second;
+    }
+    return "Неизвестное место";
+}
+
 const std::string& Model::getCurrentMap() const {
     return current_map;
 }
