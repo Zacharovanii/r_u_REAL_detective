@@ -9,8 +9,7 @@ class Controller {
 public:
     Controller(Model &m, View &v);
 
-    void run();
-    void handleExplorationInput(char ch);
-    void handleDialogueInput(char ch);
-    bool isKeyPressed();
+    void run() const;
+    void handleExplorationInput(char ch) const;
+    void handleDialogueInput(char ch) const;
 };
