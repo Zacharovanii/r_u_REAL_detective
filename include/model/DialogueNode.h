@@ -6,7 +6,7 @@
 struct DialogueChoice {
     std::string text;
     std::string next_node_id;
-    std::function<void()> on_select = nullptr; // инициализируем по умолчанию
+    std::function<void()> on_select = nullptr;
 
     DialogueChoice(std::string t, std::string next, std::function<void()> on_sel = nullptr)
         : text(std::move(t)), next_node_id(std::move(next)), on_select(std::move(on_sel)) {}

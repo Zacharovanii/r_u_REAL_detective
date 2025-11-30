@@ -3,6 +3,13 @@
 
 Dialogue::Dialogue(const std::string& id) : dialogue_id(id) {}
 
+void Dialogue::callEnterFor(const DialogueNode& node) {
+    if (node.on_enter) node.on_enter();
+}
+void Dialogue::callEnterFor(const DialogueNode* node) {
+    if (node && node->on_enter) node->on_enter();
+}
+
 void Dialogue::addNode(const DialogueNode& node) {
     nodes[node.id] = node;
 }
@@ -10,12 +17,13 @@ void Dialogue::addNode(const DialogueNode& node) {
 void Dialogue::start(const std::string& start_node_id) {
     current_node_id = start_node_id;
     finished = false;
-    
-    if (auto node = getCurrentNode()) {
-        if (node->on_enter) {
-            node->on_enter();
-        }
-    }
+
+    callEnterFor(getCurrentNode());
+}
+
+const DialogueNode* Dialogue::getCurrentNode() const {
+    auto it = nodes.find(current_node_id);
+    return it != nodes.end() ? &it->second : nullptr;
 }
 
 bool Dialogue::makeChoice(size_t choice_index) {
@@ -25,38 +33,23 @@ bool Dialogue::makeChoice(size_t choice_index) {
     }
     
     const auto& choice = node->choices[choice_index];
-    if (choice.on_select) {
-        choice.on_select();
-    }
+    if (choice.on_select) choice.on_select();
     
     if (choice.next_node_id.empty() || choice.next_node_id == "end") {
         end();
     } else {
         current_node_id = choice.next_node_id;
-        if (auto next_node = getCurrentNode()) {
-            if (next_node->on_enter) {
-                next_node->on_enter();
-            }
-        }
+        callEnterFor(getCurrentNode());
     }
     
     return true;
 }
 
 void Dialogue::end() {
-    // std::cout << "Debug: Dialogue::end() called for dialogue: " << dialogue_id << std::endl;
     finished = true;
     current_node_id.clear();
-    // std::cout << "Debug: Dialogue finished, current_node_id cleared" << std::endl;
 }
 
 bool Dialogue::isActive() const {
-    bool result = !finished && !current_node_id.empty();
-    // std::cout << "Debug: Dialogue::isActive() = " << result << " (finished: " << finished << ", current_node_id: '" << current_node_id << "')" << std::endl;
-    return result;
-}
-
-const DialogueNode* Dialogue::getCurrentNode() const {
-    auto it = nodes.find(current_node_id);
-    return it != nodes.end() ? &it->second : nullptr;
+    return !finished && !current_node_id.empty();
 }

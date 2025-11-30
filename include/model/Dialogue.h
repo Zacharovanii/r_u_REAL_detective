@@ -9,6 +9,9 @@ private:
     std::string current_node_id;
     bool finished = false;
 
+    static void callEnterFor(const DialogueNode& node);
+    static void callEnterFor(const DialogueNode* node);
+
 public:
     Dialogue() = default;
     Dialogue(const std::string& id);
