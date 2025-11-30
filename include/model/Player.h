@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Types.h"
+#include "helpers/Types.h"
 
 class Player {
     size_t x, y;

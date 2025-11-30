@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Types.h"
+#include "helpers/Types.h"
 #include "Player.h"
 
 class Interactable {

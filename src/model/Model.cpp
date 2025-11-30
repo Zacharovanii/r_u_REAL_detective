@@ -1,5 +1,5 @@
 #include "model/Model.h"
-#include "model/MapLoader.h"
+#include "helpers/MapLoader.h"
 
 Model::Model() : player(1, 1){
     initializeGameWorld();
