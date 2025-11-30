@@ -1,8 +1,8 @@
 #include "model/Map.h"
 #include "model/Player.h"
 
-void Map::addLocation(const std::string& name, const Location& location) {
-    locations[name] = location;
+void Map::addLocation(const std::string& name, Location location) {
+    locations.insert({name, std::move(location)});
 }
 
 const std::string& Map::getCurrentLocationName() const { return current_location;}
@@ -35,6 +35,13 @@ bool Map::changeLocation(const std::string& new_location) {
     }
     return false;
 }
+
+void Map::interactAt(Player& player, size_t x, size_t y) {
+    if (Location* current = getCurrentLocation()) {
+        current->interactAt(player, x, y);
+    }
+}
+
 
 void Map::interactWithDoorAt(Player& player, size_t x, size_t y) {
     Location* current = getCurrentLocation();

@@ -1,4 +1,6 @@
 #include "model/Location.h"
+#include <algorithm>
+
 
 Location::Location(const MapTiles& data, const std::string& name, const std::string& filename)
     : tiles(data), name(name), filename(filename) {}
@@ -52,13 +54,66 @@ bool Location::hasDoorAt(size_t x, size_t y) const {
     return getDoorAt(x, y) != nullptr;
 }
 
+// bool Location::canMoveTo(size_t x, size_t y) const {
+//     if (!isInside(x, y)) return false;
+//     if (isWall(x, y)) return false;
+//
+//     // Проверяем, есть ли закрытая дверь
+//     const Door* door = getDoorAt(x, y);
+//     if (door && !door->isOpen()) return false;
+//
+//     return true;
+// }
+
+void Location::rebuildCache() const {
+    if (!cache_dirty) return;
+
+    interactable_cache.clear();
+    for (const auto& interactable : interactables) {
+        interactable_cache[interactable->getPosition()] = interactable.get();
+    }
+    cache_dirty = false;
+}
+
+void Location::addInteractable(std::unique_ptr<Interactable> interactable) {
+    interactables.push_back(std::move(interactable));
+    cache_dirty = true;
+}
+
+Interactable* Location::getInteractableAt(size_t x, size_t y) {
+    rebuildCache();
+    auto it = interactable_cache.find({x, y});
+    return it != interactable_cache.end() ? it->second : nullptr;
+}
+
+const Interactable* Location::getInteractableAt(size_t x, size_t y) const {
+    rebuildCache();
+    auto it = interactable_cache.find({x, y});
+    return it != interactable_cache.end() ? it->second : nullptr;
+}
+
+bool Location::hasInteractableAt(size_t x, size_t y) const {
+    return getInteractableAt(x, y) != nullptr;
+}
+
+void Location::interactAt(Player& player, size_t x, size_t y) {
+    if (auto* interactable = getInteractableAt(x, y)) {
+        interactable->interact(player);
+    }
+}
+
+// Обновляем canMoveTo чтобы учитывать интерактивные объекты
 bool Location::canMoveTo(size_t x, size_t y) const {
-    if (!isInside(x, y)) return false;
-    if (isWall(x, y)) return false;
-    
-    // Проверяем, есть ли закрытая дверь
-    const Door* door = getDoorAt(x, y);
-    if (door && !door->isOpen()) return false;
-    
+    if (!isInside(x, y) || isWall(x, y)) {
+        return false;
+    }
+
+    // Проверяем, есть ли непроходимый интерактивный объект
+    // if (const auto* interactable = getInteractableAt(x, y)) {
+    //     // Можно добавить логику проверки проходимости
+    //     // Например, если объект блокирует движение
+    //     return true; // временно разрешаем движение
+    // }
+
     return true;
 }

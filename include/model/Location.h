@@ -1,20 +1,37 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <memory>
+#include <map>
 #include "helpers/Types.h"
 #include "Door.h"
-
+#include "Interactable.h"
 
 class Location {
 private:
-    MapTiles tiles;
+    MapTiles tiles;  // Базовые символы для отрисовки
+    std::vector<std::unique_ptr<Interactable>> interactables;
     std::vector<Door> doors;
     std::string name;
     std::string filename;
 
+    // Кэш для быстрого поиска интерактивных объектов по позиции
+    mutable std::map<Position, Interactable*> interactable_cache;
+    mutable bool cache_dirty = true;
+
+    void rebuildCache() const;
+
 public:
     Location() = default;
     Location(const MapTiles& data, const std::string& name, const std::string& filename);
+
+    // Удаляем копирование (из-за unique_ptr)
+    Location(const Location&) = delete;
+    Location& operator=(const Location&) = delete;
+
+    // Разрешаем перемещение
+    Location(Location&&) = default;
+    Location& operator=(Location&&) = default;
 
     [[nodiscard]] const MapTiles& getTiles() const;
     [[nodiscard]] const std::string& getName() const;
@@ -23,12 +40,27 @@ public:
     [[nodiscard]] bool isInside(size_t x, size_t y) const;
     [[nodiscard]] bool isWall(size_t x, size_t y) const;
 
-    // --- двери ---
+    // --- Интерактивные объекты ---
+    void addInteractable(std::unique_ptr<Interactable> interactable);
+    [[nodiscard]] Interactable* getInteractableAt(size_t x, size_t y);
+    [[nodiscard]] const Interactable* getInteractableAt(size_t x, size_t y) const;
+    [[nodiscard]] bool hasInteractableAt(size_t x, size_t y) const;
+
+    template<typename T>
+    T* getInteractableAt(size_t x, size_t y) {
+        if (auto* interactable = getInteractableAt(x, y)) {
+            return dynamic_cast<T*>(interactable);
+        }
+        return nullptr;
+    }
+
+    // --- Двери (специальный тип интерактивных объектов) ---
     void addDoor(const Door& newDoor);
     [[nodiscard]] Door* getDoorAt(size_t x, size_t y);
     [[nodiscard]] const Door* getDoorAt(size_t x, size_t y) const;
     [[nodiscard]] bool hasDoorAt(size_t x, size_t y) const;
 
-    // --- для движения ---
+    // --- Для движения и взаимодействия ---
     [[nodiscard]] bool canMoveTo(size_t x, size_t y) const;
+    void interactAt(Player& player, size_t x, size_t y);
 };

@@ -1,10 +1,15 @@
 #include "model/Model.h"
 #include "helpers/MapLoader.h"
 #include "helpers/GameInitializer.h"
+#include "helpers/DialogueInitializer.h"
+#include "helpers/ServiceLocator.h"
 
 Model::Model() : player(1, 1){
-    GameInitializer::initGameWorld(game_map);
+    GameInitializer::initGameWorld(game_map, dialogue_manager);
     GameInitializer::loadStartLocation(game_map, player, "hotel_1f");
+    DialogueInitializer::initializeDialogues(dialogue_manager);
+
+    ServiceLocator::provide(&dialogue_manager);
 }
 
 const Player& Model::getPlayer() const {
@@ -74,8 +79,16 @@ void Model::moveRight() {
 void Model::update() {
     game_map.interactWithDoorAt(player, player.getX(), player.getY());
 
-    // Обновляем текущее имя локации после возможного перехода
+    size_t x = player.getX();
+    size_t y = player.getY();
+    if (game_map.getCurrentLocation()->hasInteractableAt(x, y)) {
+        game_map.interactAt(player, x, y);
+    }
 }
+
+DialogueManager& Model::getDialogueManager() { return dialogue_manager; }
+const DialogueManager& Model::getDialogueManager() const { return dialogue_manager; }
+bool Model::isInDialogue() const { return dialogue_manager.isInDialogue(); }
 
 // Утилиты для отображения (можно оставить для совместимости)
 size_t Model::getMapSizeY() const {

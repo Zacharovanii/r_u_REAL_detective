@@ -11,7 +11,7 @@ private:
 public:
     Map() = default;
 
-    void addLocation(const std::string& name, const Location& location);
+    void addLocation(const std::string& name, Location location);
     void setCurrentLocation(const std::string& location_name);
 
     [[nodiscard]] Location* getCurrentLocation();
@@ -21,6 +21,7 @@ public:
 
     bool changeLocation(const std::string& new_location);
 
+    void interactAt(Player& player, size_t x, size_t y);
     // Для взаимодействия с дверьми
     void interactWithDoorAt(Player& player, size_t x, size_t y);
 };

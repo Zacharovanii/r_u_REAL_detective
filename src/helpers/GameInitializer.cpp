@@ -2,8 +2,9 @@
 #include "helpers/MapLoader.h"
 #include "model/Location.h"
 #include "model/Door.h"
+#include "model/NPC.h"
 
-void GameInitializer::initGameWorld(Map& map) {
+void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager) {
     // Создаем и настраиваем локации
     Location hotel_1f(MapLoader::loadByName("hotel_1f"), "Hotel First Floor", "hotel_1f");
     Location hotel_2f(MapLoader::loadByName("hotel_2f"), "Hotel Second Floor", "hotel_2f");
@@ -29,6 +30,17 @@ void GameInitializer::initGameWorld(Map& map) {
         true
     ));
 
+    hotel_1f.addInteractable(std::make_unique<NPC>(
+        Position(20, 4),
+        "Robert",
+        "The hotel receptionist",
+        "Suspicious",
+        "robert_dialogue",
+        [&dialogue_manager](const std::string& dialogue_id) {
+            dialogue_manager.startDialogue(dialogue_id);
+        }
+    ));
+
     // Дверь со 2 этажа на 1 этаж
     hotel_2f.addDoor(Door(
         Position{23, 7},
@@ -50,9 +62,9 @@ void GameInitializer::initGameWorld(Map& map) {
     ));
 
     // Добавляем локации в карту
-    map.addLocation("hotel_1f", hotel_1f);
-    map.addLocation("hotel_2f", hotel_2f);
-    map.addLocation("street", street);
+    map.addLocation("hotel_1f", std::move(hotel_1f));
+    map.addLocation("hotel_2f", std::move(hotel_2f));
+    map.addLocation("street", std::move(street));
 }
 
 std::string GameInitializer::loadStartLocation(Map& map, Player& player, const std::string& initial_location_name) {

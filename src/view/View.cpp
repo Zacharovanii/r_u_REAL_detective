@@ -5,7 +5,7 @@
 #include "ui/MapRenderer.h"
 #include <iostream>
 
-View::View(const Model& m) : model(m), mapRenderer(m) {
+View::View(const Model& m) : model(m), mapRenderer(m), actionPanel(m) {
     TerminalUtils::clearScreen();
     TerminalUtils::hideCursor();
 }
@@ -32,8 +32,11 @@ void View::draw() const {
 
     // Отрисовка
     StatusPanel::draw(model, 1, leftCol, LEFT_WIDTH);
-    ActionPanel::draw(1, centerCol, CENTER_WIDTH);
+    actionPanel.draw(1, centerCol, CENTER_WIDTH);
     mapRenderer.draw(1, rightCol, 4, 10);
+
+    TerminalUtils::moveCursor(rows - 15, 1);
+    // std::cout << "Debug: In dialogue: " << (model.getDialogueManager().isInDialogue() ? "YES" : "NO");
 
     std::cout.flush();
 }
