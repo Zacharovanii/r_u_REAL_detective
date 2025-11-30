@@ -9,7 +9,6 @@ class Model {
 private:
     Player player;
     Map game_map;
-    std::string current_location_name;
 
 public:
     Model();
@@ -33,8 +32,4 @@ public:
     [[nodiscard]] size_t getMapSizeY() const;
     [[nodiscard]] size_t getMapSizeX() const;
     [[nodiscard]] size_t getMapSizeX(size_t y) const;
-
-private:
-    void initializeGameWorld();
-    void loadInitialLocation();
 };

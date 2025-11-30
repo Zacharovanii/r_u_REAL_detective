@@ -1,67 +1,10 @@
 #include "model/Model.h"
 #include "helpers/MapLoader.h"
+#include "helpers/GameInitializer.h"
 
 Model::Model() : player(1, 1){
-    initializeGameWorld();
-    loadInitialLocation();
-}
-
-void Model::initializeGameWorld() {
-    // Создаем и настраиваем локации
-    Location hotel_1f(MapLoader::loadByName("hotel_1f"), "Hotel First Floor", "hotel_1f");
-    Location hotel_2f(MapLoader::loadByName("hotel_2f"), "Hotel Second Floor", "hotel_2f");
-    Location street(MapLoader::loadByName("street"), "Street", "street");
-
-    // Добавляем двери в локации
-    // Пример: дверь с 1 этажа на 2 этаж
-    hotel_1f.addDoor(Door(
-        Position{28, 3},
-        "Stairs to 2F",
-        "A staircase leading to the second floor",
-        "hotel_2f",
-        Position{23, 8},  // позиция появления на 2 этаже
-        true
-    ));
-
-    // Пример: дверь со 2 этажа на 1 этаж
-    hotel_2f.addDoor(Door(
-        Position{23, 7},
-        "Stairs to 1F",
-        "A staircase leading to the first floor",
-        "hotel_1f",
-        Position{28, 4},  // позиция появления на 1 этаже
-        true
-    ));
-
-    // Пример: входная дверь
-    hotel_1f.addDoor(Door(
-        Position{35, 5},
-        "Main Entrance",
-        "The main entrance to the hotel",
-        "street",
-        Position{1, 1},
-        true
-    ));
-
-    street.addDoor(Door(
-        Position{1, 3},
-        "Hotel Entrance",
-        "The entrance to the hotel",
-        "hotel_1f",
-        Position{34, 5},
-        true
-    ));
-
-    // Добавляем локации в карту
-    game_map.addLocation("hotel_1f", hotel_1f);
-    game_map.addLocation("hotel_2f", hotel_2f);
-    game_map.addLocation("street", street);
-}
-
-void Model::loadInitialLocation() {
-    current_location_name = "hotel_1f";
-    game_map.setCurrentLocation(current_location_name);
-    player.setPositionAt(1, 1);
+    GameInitializer::initGameWorld(game_map);
+    GameInitializer::loadStartLocation(game_map, player, "hotel_1f");
 }
 
 const Player& Model::getPlayer() const {
@@ -77,7 +20,7 @@ const Location* Model::getCurrentLocation() const {
 }
 
 const std::string& Model::getCurrentLocationName() const {
-    return current_location_name;
+    return game_map.getCurrentLocationName();
 }
 
 void Model::moveUp() {
@@ -132,7 +75,6 @@ void Model::interact() {
     game_map.interactWithDoorAt(player, player.getX(), player.getY());
 
     // Обновляем текущее имя локации после возможного перехода
-    current_location_name = game_map.getCurrentLocationName();
 }
 
 // Утилиты для отображения (можно оставить для совместимости)
