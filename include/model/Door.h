@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <utility>
-#include "model/Interactable.h"
+#include "Interactable.h"
 
 class Door : public Interactable {
     std::string target_location;

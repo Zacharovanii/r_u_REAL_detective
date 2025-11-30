@@ -1,7 +1,5 @@
 #include "model/Door.h"
-
 #include <iostream>
-
 #include "model/Player.h"
 
 Door::Door(const Position& initial_pos, const std::string& name, const std::string& description,
@@ -14,7 +12,7 @@ Door::Door(const Position& initial_pos, const std::string& name, const std::stri
 
 void Door::interact(Player& player) {
     if (is_open) {
-        std::cout << player.getX();
+        player.setPositionAt(getTargetPosition());
     }
     // Можно добавить логику, если дверь закрыта ()
 }

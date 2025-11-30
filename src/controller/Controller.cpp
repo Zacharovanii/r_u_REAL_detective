@@ -36,7 +36,7 @@ void Controller::run() {
         if (ch == 'a') model.moveLeft();
         if (ch == 'd') model.moveRight();
 
-        model.interact();
+        model.update();
 
         view.draw();
     }

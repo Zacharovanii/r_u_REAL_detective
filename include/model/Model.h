@@ -26,7 +26,7 @@ public:
     void moveRight();
 
     // Взаимодействие
-    void interact();
+    void update();
 
     // Утилиты
     [[nodiscard]] size_t getMapSizeY() const;

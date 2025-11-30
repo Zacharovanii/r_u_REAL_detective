@@ -71,7 +71,7 @@ void Model::moveRight() {
     }
 }
 
-void Model::interact() {
+void Model::update() {
     game_map.interactWithDoorAt(player, player.getX(), player.getY());
 
     // Обновляем текущее имя локации после возможного перехода

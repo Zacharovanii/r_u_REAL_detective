@@ -5,10 +5,11 @@ void Map::addLocation(const std::string& name, const Location& location) {
     locations[name] = location;
 }
 
+const std::string& Map::getCurrentLocationName() const { return current_location;}
+
 void Map::setCurrentLocation(const std::string& location_name) {
-    if (locations.find(location_name) != locations.end()) {
+    if (locations.contains(location_name))
         current_location = location_name;
-    }
 }
 
 Location* Map::getCurrentLocation() {
@@ -27,12 +28,8 @@ Location* Map::getLocation(const std::string& name) {
     return it != locations.end() ? &it->second : nullptr;
 }
 
-const std::string& Map::getCurrentLocationName() const {
-    return current_location;
-}
-
 bool Map::changeLocation(const std::string& new_location) {
-    if (locations.find(new_location) != locations.end()) {
+    if (locations.contains(new_location)) {
         current_location = new_location;
         return true;
     }
@@ -43,9 +40,8 @@ void Map::interactWithDoorAt(Player& player, size_t x, size_t y) {
     Location* current = getCurrentLocation();
     if (!current) return;
 
-    Door* door = current->getDoorAt(x, y);
-    if (door) {
+    if (Door* door = current->getDoorAt(x, y)) {
         changeLocation(door->getTargetLocation());
-        player.setPositionAt(door->getTargetPosition());
+        door->interact(player);
     }
 }
