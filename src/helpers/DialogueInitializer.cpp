@@ -22,8 +22,8 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
     detective.speaker = "Роберт";
     detective.text = "Детектив? Хм... Ладно, что тебе нужно? Но говори быстро.";
     detective.choices = {
-        {"Расскажите о вчерашнем вечере", "yesterday", nullptr},
-        {"Вы видели что-то подозрительное?", "suspicious", nullptr},
+        {"Расскажите о вчерашнем вечере", "end", nullptr},
+        {"Вы видели что-то подозрительное?", "end", nullptr},
         {"Извините, побеспокоил", "end", nullptr}
     };
 
