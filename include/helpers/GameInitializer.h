@@ -2,7 +2,7 @@
 #include <string>
 #include "model/Map.h"
 #include "model/Player.h"
-#include "model/DialogueManager.h"
+#include "model/dialogue/DialogueManager.h"
 
 class GameInitializer {
 public:

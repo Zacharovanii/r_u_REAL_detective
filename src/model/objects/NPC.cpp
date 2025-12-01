@@ -1,6 +1,5 @@
-#include "model/NPC.h"
-#include "helpers/ServiceLocator.h"
-#include "model/DialogueManager.h"
+#include "../../../include/model/objects/NPC.h"
+#include "model/dialogue/DialogueManager.h"
 
 NPC::NPC(const Position& initial_pos, const std::string& name,
          const std::string& description, const std::string& attitude,

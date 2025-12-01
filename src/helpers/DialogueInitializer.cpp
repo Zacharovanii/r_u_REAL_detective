@@ -1,5 +1,5 @@
 #include "helpers/DialogueInitializer.h"
-#include "model/Dialogue.h"
+#include "model/dialogue/Dialogue.h"
 #include <iostream>
 
 void DialogueInitializer::initializeDialogues(DialogueManager& manager) {

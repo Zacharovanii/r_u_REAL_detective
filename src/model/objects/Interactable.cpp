@@ -1,4 +1,4 @@
-#include "model/Interactable.h"
+#include "model/objects/Interactable.h"
 
 Interactable::Interactable(const Position& initial_pos, const std::string& name, const std::string& description) :
     position(initial_pos), name(std::move(name)), description(std::move(description)) {}

@@ -4,8 +4,8 @@
 #include <memory>
 #include <map>
 #include "helpers/Types.h"
-#include "Door.h"
-#include "Interactable.h"
+#include "objects/Door.h"
+#include "objects/Interactable.h"
 
 class Location {
 private:

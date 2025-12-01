@@ -2,14 +2,11 @@
 #include "helpers/MapLoader.h"
 #include "helpers/GameInitializer.h"
 #include "helpers/DialogueInitializer.h"
-#include "helpers/ServiceLocator.h"
 
 Model::Model() : player(1, 1){
     GameInitializer::initGameWorld(game_map, dialogue_manager);
     GameInitializer::loadStartLocation(game_map, player, "hotel_1f");
     DialogueInitializer::initializeDialogues(dialogue_manager);
-
-    ServiceLocator::provide(&dialogue_manager);
 }
 
 const Player& Model::getPlayer() const {

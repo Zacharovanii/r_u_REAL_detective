@@ -1,6 +1,6 @@
 #pragma once
 #include "model/Model.h"
-#include "model/Dialogue.h"
+#include "model/dialogue/Dialogue.h"
 #include <vector>
 #include <string>
 

@@ -1,7 +1,7 @@
 #include "ui/ActionPanel.h"
 #include "ui/TerminalUtils.h"
 #include "ui/FrameDrawer.h"
-#include "model/Dialogue.h"
+#include "model/dialogue/Dialogue.h"
 #include <iostream>
 #include <sstream>
 

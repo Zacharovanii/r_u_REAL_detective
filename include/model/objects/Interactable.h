@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "helpers/Types.h"
-#include "Player.h"
+#include "model/Player.h"
 
 class Interactable {
 protected:

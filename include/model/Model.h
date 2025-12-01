@@ -4,7 +4,7 @@
 #include "model/Player.h"
 #include "model/Map.h"
 #include "model/Location.h"
-#include "model/DialogueManager.h"
+#include "model/dialogue/DialogueManager.h"
 
 class Model {
 private:

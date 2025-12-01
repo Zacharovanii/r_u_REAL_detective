@@ -1,5 +1,5 @@
-#include "model/Door.h"
 #include <iostream>
+#include "model/objects/Door.h"
 #include "model/Player.h"
 
 Door::Door(const Position& initial_pos, const std::string& name, const std::string& description,

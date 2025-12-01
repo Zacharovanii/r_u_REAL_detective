@@ -1,4 +1,4 @@
-#include "model/Dialogue.h"
+#include "model/dialogue/Dialogue.h"
 #include <iostream>
 
 Dialogue::Dialogue(const std::string& id) : dialogue_id(id) {}

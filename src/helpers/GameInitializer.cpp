@@ -1,8 +1,8 @@
 #include "helpers/GameInitializer.h"
 #include "helpers/MapLoader.h"
 #include "model/Location.h"
-#include "model/Door.h"
-#include "model/NPC.h"
+#include "model/objects/Door.h"
+#include "model/objects/NPC.h"
 
 void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager) {
     // Создаем и настраиваем локации

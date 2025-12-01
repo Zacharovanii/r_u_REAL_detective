@@ -1,4 +1,4 @@
-#include "model/DialogueManager.h"
+#include "model/dialogue/DialogueManager.h"
 #include <iostream>
 
 void DialogueManager::registerDialogue(Dialogue&& dialogue) {

@@ -1,5 +1,5 @@
 #pragma once
-#include "model/DialogueManager.h"
+#include "model/dialogue/DialogueManager.h"
 
 class DialogueInitializer {
 public:
