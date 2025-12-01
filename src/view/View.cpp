@@ -20,23 +20,19 @@ void View::draw() const {
     TerminalUtils::getTerminalSize(rows, cols);
     TerminalUtils::clearScreen();
 
-    // Ширины панелей (можно вынести в константы класса)
-    constexpr int LEFT_WIDTH = 30;    // Статус-панель
+    // constexpr int LEFT_WIDTH = 30;    // Статус-панель
     constexpr int RIGHT_WIDTH = 22;   // Карта
     constexpr int CENTER_WIDTH = 40;  // Действия
 
-    // Позиции
-    constexpr int leftCol = 1;                            // Слева
-    const int rightCol = cols - RIGHT_WIDTH;          // Справа
-    const int centerCol = cols / 2 - CENTER_WIDTH / 3 - 1;  // По центру
+    constexpr int leftCol = 1;
+    const int rightCol = cols - RIGHT_WIDTH - 1;                // Справа
+    // const int centerCol = cols / 2 - CENTER_WIDTH / 3 - 1;  // По центру
 
-    // Отрисовка
-    StatusPanel::draw(model, 1, leftCol, LEFT_WIDTH);
-    actionPanel.draw(1, centerCol, CENTER_WIDTH);
+    StatusPanel::draw(model, 12, rightCol, RIGHT_WIDTH + 1);
+    actionPanel.draw(1, leftCol, CENTER_WIDTH);
     mapRenderer.draw(1, rightCol, 4, 10);
 
     TerminalUtils::moveCursor(rows - 15, 1);
-    // std::cout << "Debug: In dialogue: " << (model.getDialogueManager().isInDialogue() ? "YES" : "NO");
 
     std::cout.flush();
 }
