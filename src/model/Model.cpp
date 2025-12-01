@@ -90,7 +90,7 @@ DialogueManager& Model::getDialogueManager() { return dialogue_manager; }
 const DialogueManager& Model::getDialogueManager() const { return dialogue_manager; }
 bool Model::isInDialogue() const { return dialogue_manager.isInDialogue(); }
 
-// Утилиты для отображения (можно оставить для совместимости)
+
 size_t Model::getMapSizeY() const {
     const Location* location = getCurrentLocation();
     if (!location) return 0;

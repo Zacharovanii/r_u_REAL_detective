@@ -14,5 +14,5 @@ public:
     void endDialogue();
 
     bool isInDialogue() const;
-    const Dialogue* getCurrentDialogue() const { return current_dialogue; }
+    const Dialogue* getCurrentDialogue() const;
 };

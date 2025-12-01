@@ -24,19 +24,17 @@ bool DialogueManager::makeChoice(size_t choice_index) {
 }
 
 void DialogueManager::endDialogue() {
-    // std::cout << "Debug: DialogueManager::endDialogue() called" << std::endl;
     if (current_dialogue) {
-        // std::cout << "Debug: Current dialogue: " << current_dialogue->getId() << std::endl;
         current_dialogue->end();
         current_dialogue = nullptr;
-        // std::cout << "Debug: Dialogue ended and cleared" << std::endl;
-    } else {
-        // std::cout << "Debug: No current dialogue to end" << std::endl;
     }
 }
 
 bool DialogueManager::isInDialogue() const {
     bool result = current_dialogue && current_dialogue->isActive();
-    // std::cout << "Debug: isInDialogue() = " << result << " (current_dialogue: " << (current_dialogue ? current_dialogue->getId() : "null") << ")" << std::endl;
     return result;
+}
+
+const Dialogue* DialogueManager::getCurrentDialogue() const {
+    return current_dialogue;
 }
