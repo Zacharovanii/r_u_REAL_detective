@@ -41,10 +41,6 @@ public:
     void update();
 
     // Утилиты
-    [[nodiscard]] size_t getMapSizeY() const;
-    [[nodiscard]] size_t getMapSizeX() const;
-    [[nodiscard]] size_t getMapSizeX(size_t y) const;
-
     DialogueManager& getDialogueManager();
     const DialogueManager& getDialogueManager() const;
     bool isInDialogue() const;

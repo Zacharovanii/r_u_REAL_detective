@@ -9,10 +9,19 @@ Model::Model() : player(1, 1){
     DialogueInitializer::initializeDialogues(dialogue_manager);
 }
 
-const Player& Model::getPlayer() const {return player;}
 const Map& Model::getMap() const {return game_map;}
+const Player& Model::getPlayer() const {return player;}
+
 const Location* Model::getCurrentLocation() const {return game_map.getCurrentLocation();}
 const std::string& Model::getCurrentLocationName() const {return game_map.getCurrentLocationName();}
+
+const DialogueManager& Model::getDialogueManager() const { return dialogue_manager; }
+DialogueManager& Model::getDialogueManager() { return dialogue_manager; }
+bool Model::isInDialogue() const { return dialogue_manager.isInDialogue(); }
+
+const std::vector<const Interactable*>& Model::getNearbyInteractables() const {return nearby_interactables;}
+size_t Model::getDetectionRadius() const {return detection_radius;}
+void Model::setDetectionRadius(size_t radius) {detection_radius = radius;}
 
 void Model::movePlayer(Direction direction) {
     const Location* location = getCurrentLocation();
@@ -49,35 +58,6 @@ void Model::update() {
     }
 }
 
-DialogueManager& Model::getDialogueManager() { return dialogue_manager; }
-const DialogueManager& Model::getDialogueManager() const { return dialogue_manager; }
-bool Model::isInDialogue() const { return dialogue_manager.isInDialogue(); }
-
-
-size_t Model::getMapSizeY() const {
-    const Location* location = getCurrentLocation();
-    if (!location) return 0;
-
-    const auto& tiles = location->getTiles();
-    return tiles.size();
-}
-
-size_t Model::getMapSizeX() const {
-    const Location* location = getCurrentLocation();
-    if (!location) return 0;
-
-    const auto& tiles = location->getTiles();
-    return tiles.empty() ? 0 : tiles[0].size();
-}
-
-size_t Model::getMapSizeX(size_t y) const {
-    const Location* location = getCurrentLocation();
-    if (!location) return 0;
-
-    const auto& tiles = location->getTiles();
-    return y < tiles.size() ? tiles[y].size() : 0;
-}
-
 void Model::scanAroundPlayer() {
     nearby_interactables.clear();
 
@@ -112,16 +92,4 @@ void Model::interactWithNearby(size_t index) {
     // Нужно снять const для вызова неконстантного метода interact()
     // Безопасно, так как мы владеем объектом
     const_cast<Interactable*>(interactable)->interact(player);
-}
-
-const std::vector<const Interactable*>& Model::getNearbyInteractables() const {
-    return nearby_interactables;
-}
-
-size_t Model::getDetectionRadius() const {
-    return detection_radius;
-}
-
-void Model::setDetectionRadius(size_t radius) {
-    detection_radius = radius;
 }
