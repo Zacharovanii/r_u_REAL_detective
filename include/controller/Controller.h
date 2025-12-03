@@ -10,6 +10,8 @@ public:
     Controller(Model &m, View &v);
 
     void run() const;
+
     void handleExplorationInput(char ch) const;
     void handleDialogueInput(char ch) const;
+    void handleInteractionChoice(char ch) const;
 };

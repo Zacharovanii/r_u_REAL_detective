@@ -13,6 +13,9 @@ private:
 
     DialogueManager dialogue_manager;
 
+    std::vector<const Interactable*> nearby_interactables;
+    size_t detection_radius = 2;
+
 public:
     Model();
 
@@ -47,4 +50,10 @@ public:
     DialogueManager& getDialogueManager();
     const DialogueManager& getDialogueManager() const;
     bool isInDialogue() const;
+
+    void scanAroundPlayer();
+    const std::vector<const Interactable*>& getNearbyInteractables() const;
+    void interactWithNearby(size_t index);
+    size_t getDetectionRadius() const;
+    void setDetectionRadius(size_t radius);
 };

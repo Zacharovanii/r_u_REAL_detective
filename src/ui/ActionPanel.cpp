@@ -8,11 +8,64 @@
 ActionPanel::ActionPanel(const Model& model) : model(model) {}
 
 
+void ActionPanel::drawInteractablesList(int row, int col, int width) const {
+    const auto& interactables = model.getNearbyInteractables();
+
+    // Вычисляем высоту: заголовок + по строке на каждый объект + подсказка
+    int height = 3 + interactables.size();
+
+    FrameDrawer::drawFrame(row, col, height, width);
+
+    // Заголовок
+    TerminalUtils::moveCursor(row + 1, col + 2);
+    std::cout << "📡 Объекты рядом (" << interactables.size() << "):";
+
+    // Список объектов с номерами
+    for (size_t i = 0; i < interactables.size(); ++i) {
+        const auto* interactable = interactables[i];
+        TerminalUtils::moveCursor(row + 2 + i, col + 4);
+
+        // Форматируем строку: номер, имя, описание, расстояние
+        size_t player_x = model.getPlayer().getX();
+        size_t player_y = model.getPlayer().getY();
+        size_t dist_x = (interactable->getX() > player_x) ?
+                        interactable->getX() - player_x : player_x - interactable->getX();
+        size_t dist_y = (interactable->getY() > player_y) ?
+                        interactable->getY() - player_y : player_y - interactable->getY();
+        size_t distance = dist_x + dist_y;
+
+        std::cout << (i + 1) << ". " << interactable->getName();
+
+        // Если есть место, добавляем описание
+        if (width > 30) {
+            std::cout << " - " << interactable->getDescription();
+        }
+
+        // Если есть место, добавляем расстояние
+        if (width > 40) {
+            std::cout << " [" << distance << " cells]";
+        }
+    }
+
+    // Подсказка управления
+    TerminalUtils::moveCursor(row + height - 1, col + 2);
+    if (interactables.size() <= 9) {
+        std::cout << "Нажмите 1-" << interactables.size() << " для взаимодействия";
+    } else {
+        std::cout << "Используйте инвентарь для большего количества объектов";
+    }
+}
+
 void ActionPanel::draw(int row, int col, int width) const {
-    if (model.getDialogueManager().isInDialogue()) {
+    if (model.isInDialogue()) {
         drawDialogue(row, col, width, model.getDialogueManager().getCurrentDialogue());
     } else {
-        drawEmpty(row, col, width);
+        // Если есть интерактивные объекты рядом, показываем их список
+        if (!model.getNearbyInteractables().empty()) {
+            drawInteractablesList(row, col, width);
+        } else {
+            drawEmpty(row, col, width);
+        }
     }
 }
 

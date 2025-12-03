@@ -87,9 +87,11 @@ Interactable* Location::getInteractableAt(size_t x, size_t y) {
 }
 
 const Interactable* Location::getInteractableAt(size_t x, size_t y) const {
-    rebuildCache();
-    auto it = interactable_cache.find({x, y});
-    return it != interactable_cache.end() ? it->second : nullptr;
+    // rebuildCache();
+    // auto it = interactable_cache.find({x, y});
+    // return it != interactable_cache.end() ? it->second : nullptr;
+
+    return const_cast<Location*>(this)->getInteractableAt(x, y);
 }
 
 bool Location::hasInteractableAt(size_t x, size_t y) const {

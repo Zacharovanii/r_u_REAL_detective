@@ -44,6 +44,7 @@ public:
     void addInteractable(std::unique_ptr<Interactable> interactable);
     [[nodiscard]] Interactable* getInteractableAt(size_t x, size_t y);
     [[nodiscard]] const Interactable* getInteractableAt(size_t x, size_t y) const;
+
     [[nodiscard]] bool hasInteractableAt(size_t x, size_t y) const;
 
     template<typename T>

@@ -81,6 +81,8 @@ void Model::update() {
     if (game_map.getCurrentLocation()->hasInteractableAt(x, y)) {
         game_map.interactAt(player, x, y);
     }
+
+    scanAroundPlayer();
 }
 
 DialogueManager& Model::getDialogueManager() { return dialogue_manager; }
@@ -110,4 +112,56 @@ size_t Model::getMapSizeX(size_t y) const {
 
     const auto& tiles = location->getTiles();
     return y < tiles.size() ? tiles[y].size() : 0;
+}
+
+void Model::scanAroundPlayer() {
+    nearby_interactables.clear();
+
+    const Location* location = getCurrentLocation();
+    if (!location) return;
+
+    size_t player_x = player.getX();
+    size_t player_y = player.getY();
+
+
+    for (size_t y = (player_y > detection_radius ? player_y - detection_radius : 0);
+         y <= player_y + detection_radius; ++y) {
+        for (size_t x = (player_x > detection_radius ? player_x - detection_radius : 0);
+             x <= player_x + detection_radius; ++x) {
+
+            if (x == player_x && y == player_y) continue;
+
+            const Interactable* interactable = location->getInteractableAt(x, y);
+            if (interactable && std::find(nearby_interactables.begin(),
+                              nearby_interactables.end(),
+                              interactable) == nearby_interactables.end())
+                nearby_interactables.push_back(interactable);
+        }
+    }
+}
+
+void Model::interactWithNearby(size_t index) {
+    if (index >= nearby_interactables.size()) {
+        return;
+    }
+
+    const Interactable* interactable = nearby_interactables[index];
+
+    // Нужно снять const для вызова неконстантного метода interact()
+    // Безопасно, так как мы владеем объектом
+    const_cast<Interactable*>(interactable)->interact(player);
+}
+
+
+
+const std::vector<const Interactable*>& Model::getNearbyInteractables() const {
+    return nearby_interactables;
+}
+
+size_t Model::getDetectionRadius() const {
+    return detection_radius;
+}
+
+void Model::setDetectionRadius(size_t radius) {
+    detection_radius = radius;
 }

@@ -36,11 +36,13 @@ void Controller::run() const {
         if (ch == ESC) {
             break;
         } else if (isInDialogue) {
-
             if (ch == 'q') model.getDialogueManager().endDialogue();
             else if (ch >= '1' && ch <= '9') handleDialogueInput(ch);
+        } else if (ch >= '1' && ch <= '9') {
+            handleInteractionChoice(ch);
+        } else {
+            handleExplorationInput(ch);
         }
-        else handleExplorationInput(ch);
 
 
         model.update();
@@ -61,7 +63,12 @@ void Controller::handleExplorationInput(char ch) const {
     }
 }
 
+void Controller::handleInteractionChoice(char ch) const {
+    size_t index = ch - '1';
+    model.interactWithNearby(index);
+}
+
 void Controller::handleDialogueInput(char ch) const {
-        size_t choice = ch - '1'; // преобразуем '1' в 0, '2' в 1 и т.д.
-        model.getDialogueManager().makeChoice(choice);
+    size_t choice = ch - '1'; // преобразуем '1' в 0, '2' в 1 и т.д.
+    model.getDialogueManager().makeChoice(choice);
 }

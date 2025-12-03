@@ -12,7 +12,11 @@ public:
 
     void draw(int row, int col, int width) const;
     void drawDialogue(int row, int col, int width, const class Dialogue* dialogue) const;
-    std::vector<std::string> wrapText(const std::string& text, int max_width) const;
-    int getStringWidth(const std::string& str) const;
+
+    [[nodiscard]] std::vector<std::string> wrapText(const std::string& text, int max_width) const;
+    [[nodiscard]] int getStringWidth(const std::string& str) const;
+
+
+    void drawInteractablesList(int row, int col, int width) const;
     void drawEmpty(int row, int col, int width) const;
 };
