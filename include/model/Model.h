@@ -5,6 +5,7 @@
 #include "model/Map.h"
 #include "model/Location.h"
 #include "model/dialogue/DialogueManager.h"
+#include "helpers/Types.h"
 
 class Model {
 private:
@@ -14,7 +15,7 @@ private:
     DialogueManager dialogue_manager;
 
     std::vector<const Interactable*> nearby_interactables;
-    size_t detection_radius = 2;
+    size_t detection_radius = 1;
 
 public:
     Model();
@@ -34,10 +35,7 @@ public:
     [[nodiscard]] const std::string& getCurrentLocationName() const;
 
     // Перемещение
-    void moveUp();
-    void moveDown();
-    void moveLeft();
-    void moveRight();
+    void movePlayer(Direction direction);
 
     // Взаимодействие
     void update();

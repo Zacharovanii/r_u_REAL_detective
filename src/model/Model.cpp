@@ -9,69 +9,35 @@ Model::Model() : player(1, 1){
     DialogueInitializer::initializeDialogues(dialogue_manager);
 }
 
-const Player& Model::getPlayer() const {
-    return player;
-}
+const Player& Model::getPlayer() const {return player;}
+const Map& Model::getMap() const {return game_map;}
+const Location* Model::getCurrentLocation() const {return game_map.getCurrentLocation();}
+const std::string& Model::getCurrentLocationName() const {return game_map.getCurrentLocationName();}
 
-const Map& Model::getMap() const {
-    return game_map;
-}
-
-const Location* Model::getCurrentLocation() const {
-    return game_map.getCurrentLocation();
-}
-
-const std::string& Model::getCurrentLocationName() const {
-    return game_map.getCurrentLocationName();
-}
-
-void Model::moveUp() {
+void Model::movePlayer(Direction direction) {
     const Location* location = getCurrentLocation();
     if (!location) return;
 
-    size_t new_x = player.getX();
-    size_t new_y = player.getY() - 1;
+    auto [dx, dy] = offset(direction);
 
-    if (location->canMoveTo(new_x, new_y)) {
-        player.setPositionAt(new_x, new_y);
+    // Безопасное преобразование и вычисление
+    ptrdiff_t new_x = static_cast<ptrdiff_t>(player.getX()) + dx;
+    ptrdiff_t new_y = static_cast<ptrdiff_t>(player.getY()) + dy;
+
+    // Защита от отрицательных координат
+    if (new_x < 0 || new_y < 0) {
+        return;
+    }
+
+    auto final_x = static_cast<size_t>(new_x);
+    auto final_y = static_cast<size_t>(new_y);
+
+    if (location->canMoveTo(final_x, final_y)) {
+        player.setPositionAt(final_x, final_y);
+        scanAroundPlayer();
     }
 }
 
-void Model::moveDown() {
-    const Location* location = getCurrentLocation();
-    if (!location) return;
-
-    size_t new_x = player.getX();
-    size_t new_y = player.getY() + 1;
-
-    if (location->canMoveTo(new_x, new_y)) {
-        player.setPositionAt(new_x, new_y);
-    }
-}
-
-void Model::moveLeft() {
-    const Location* location = getCurrentLocation();
-    if (!location) return;
-
-    size_t new_x = player.getX() - 1;
-    size_t new_y = player.getY();
-
-    if (location->canMoveTo(new_x, new_y)) {
-        player.setPositionAt(new_x, new_y);
-    }
-}
-
-void Model::moveRight() {
-    const Location* location = getCurrentLocation();
-    if (!location) return;
-
-    size_t new_x = player.getX() + 1;
-    size_t new_y = player.getY();
-
-    if (location->canMoveTo(new_x, new_y)) {
-        player.setPositionAt(new_x, new_y);
-    }
-}
 
 void Model::update() {
     game_map.interactWithDoorAt(player, player.getX(), player.getY());
@@ -81,8 +47,6 @@ void Model::update() {
     if (game_map.getCurrentLocation()->hasInteractableAt(x, y)) {
         game_map.interactAt(player, x, y);
     }
-
-    scanAroundPlayer();
 }
 
 DialogueManager& Model::getDialogueManager() { return dialogue_manager; }
@@ -132,7 +96,7 @@ void Model::scanAroundPlayer() {
             if (x == player_x && y == player_y) continue;
 
             const Interactable* interactable = location->getInteractableAt(x, y);
-            if (interactable && std::find(nearby_interactables.begin(),
+            if (interactable && std::ranges::find(nearby_interactables.begin(),
                               nearby_interactables.end(),
                               interactable) == nearby_interactables.end())
                 nearby_interactables.push_back(interactable);
@@ -144,15 +108,11 @@ void Model::interactWithNearby(size_t index) {
     if (index >= nearby_interactables.size()) {
         return;
     }
-
     const Interactable* interactable = nearby_interactables[index];
-
     // Нужно снять const для вызова неконстантного метода interact()
     // Безопасно, так как мы владеем объектом
     const_cast<Interactable*>(interactable)->interact(player);
 }
-
-
 
 const std::vector<const Interactable*>& Model::getNearbyInteractables() const {
     return nearby_interactables;

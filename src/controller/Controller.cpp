@@ -1,8 +1,9 @@
-#include "controller/Controller.h"
-#include "ui/TerminalUtils.h"
 #include <termios.h>
 #include <unistd.h>
 #include <iostream>
+#include "controller/Controller.h"
+#include "ui/TerminalUtils.h"
+#include "helpers/Types.h"
 
 using namespace std;
 
@@ -55,10 +56,10 @@ void Controller::run() const {
 
 void Controller::handleExplorationInput(char ch) const {
     switch (ch) {
-        case 'w': model.moveUp(); break;
-        case 's': model.moveDown(); break;
-        case 'a': model.moveLeft(); break;
-        case 'd': model.moveRight(); break;
+        case 'w': model.movePlayer(Direction::UP); break;
+        case 's': model.movePlayer(Direction::DOWN); break;
+        case 'a': model.movePlayer(Direction::LEFT); break;
+        case 'd': model.movePlayer(Direction::RIGHT); break;
         default: break;
     }
 }
