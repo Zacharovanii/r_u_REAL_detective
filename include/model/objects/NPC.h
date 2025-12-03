@@ -19,7 +19,7 @@ public:
 
     void interact(Player& player) override;
 
-    std::string getDialogueId() const { return dialogue_id; }
-    std::string getAttitude() const { return attitude; }
-    void setAttitude(const std::string& new_attitude) { attitude = new_attitude; }
+    std::string getDialogueId() const;
+    std::string getAttitude() const;
+    void setAttitude(const std::string& new_attitude);
 };

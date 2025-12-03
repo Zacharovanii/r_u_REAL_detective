@@ -9,7 +9,7 @@
 
 class Location {
 private:
-    MapTiles tiles;  // Базовые символы для отрисовки
+    MapTiles tiles;
     std::vector<std::unique_ptr<Interactable>> interactables;
     std::vector<Door> doors;
     std::string name;
@@ -44,16 +44,7 @@ public:
     void addInteractable(std::unique_ptr<Interactable> interactable);
     [[nodiscard]] Interactable* getInteractableAt(size_t x, size_t y);
     [[nodiscard]] const Interactable* getInteractableAt(size_t x, size_t y) const;
-
     [[nodiscard]] bool hasInteractableAt(size_t x, size_t y) const;
-
-    template<typename T>
-    T* getInteractableAt(size_t x, size_t y) {
-        if (auto* interactable = getInteractableAt(x, y)) {
-            return dynamic_cast<T*>(interactable);
-        }
-        return nullptr;
-    }
 
     // --- Двери (специальный тип интерактивных объектов) ---
     void addDoor(const Door& newDoor);
@@ -61,7 +52,6 @@ public:
     [[nodiscard]] const Door* getDoorAt(size_t x, size_t y) const;
     [[nodiscard]] bool hasDoorAt(size_t x, size_t y) const;
 
-    // --- Для движения и взаимодействия ---
     [[nodiscard]] bool canMoveTo(size_t x, size_t y) const;
     void interactAt(Player& player, size_t x, size_t y);
 };

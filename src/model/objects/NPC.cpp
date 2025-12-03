@@ -11,8 +11,12 @@ NPC::NPC(const Position& initial_pos, const std::string& name,
       start_dialogue_callback(start_dialogue_callback)
 {}
 
+std::string NPC::getDialogueId() const { return dialogue_id; }
+std::string NPC::getAttitude() const { return attitude; }
+void NPC::setAttitude(const std::string& new_attitude) { attitude = new_attitude; }
+
 void NPC::interact(Player& player) {
-    player.setPositionAt(player.getX(), player.getY() - 1);
+    player.setPositionAt(player.getX(), player.getY());
     if (start_dialogue_callback) {
         start_dialogue_callback(dialogue_id);
     }

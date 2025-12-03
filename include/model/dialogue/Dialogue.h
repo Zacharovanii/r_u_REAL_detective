@@ -17,12 +17,13 @@ public:
     Dialogue(const std::string& id);
 
     void addNode(const DialogueNode& node);
-    void start(const std::string& start_node_id);
     bool makeChoice(size_t choice_index);
+    void start(const std::string& start_node_id);
     void end();
 
     bool isFinished() const { return finished; }
     bool isActive() const;
+
     const DialogueNode* getCurrentNode() const;
     std::string getId() const { return dialogue_id; }
 };

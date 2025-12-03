@@ -23,24 +23,12 @@ private:
 public:
     Model();
 
-    void debugEndDialogue() {
-        dialogue_manager.endDialogue();
-    }
-
-    void debugStartDialogue() {
-        dialogue_manager.startDialogue("robert_dialogue");
-    }
-
-    // Основные методы
     [[nodiscard]] const Player& getPlayer() const;
     [[nodiscard]] const Map& getMap() const;
     [[nodiscard]] const Location* getCurrentLocation() const;
     [[nodiscard]] const std::string& getCurrentLocationName() const;
 
-    // Перемещение
     void movePlayer(Direction direction);
-
-    // Взаимодействие
     void update();
 
     // Утилиты
