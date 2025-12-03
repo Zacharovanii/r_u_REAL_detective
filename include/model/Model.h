@@ -17,6 +17,9 @@ private:
     std::vector<const Interactable*> nearby_interactables;
     size_t detection_radius = 1;
 
+    [[nodiscard]] size_t getScanStart(size_t n) const;
+    [[nodiscard]] size_t getScanEnd(size_t n) const;
+
 public:
     Model();
 

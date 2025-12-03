@@ -58,6 +58,9 @@ void Model::update() {
     }
 }
 
+size_t Model::getScanStart(size_t n) const { return n > detection_radius ? n - detection_radius : 0; }
+size_t Model::getScanEnd(size_t n) const { return n + detection_radius; }
+
 void Model::scanAroundPlayer() {
     nearby_interactables.clear();
 
@@ -67,18 +70,14 @@ void Model::scanAroundPlayer() {
     size_t player_x = player.getX();
     size_t player_y = player.getY();
 
+    size_t start_y = getScanStart(player_y), start_x = getScanStart(player_x);
+    size_t end_y = getScanEnd(player_y), end_x = getScanEnd(player_x);
 
-    for (size_t y = (player_y > detection_radius ? player_y - detection_radius : 0);
-         y <= player_y + detection_radius; ++y) {
-        for (size_t x = (player_x > detection_radius ? player_x - detection_radius : 0);
-             x <= player_x + detection_radius; ++x) {
-
+    for (size_t y = start_y; y <= end_y; ++y) {
+        for (size_t x = start_x; x <= end_x; ++x) {
             if (x == player_x && y == player_y) continue;
 
-            const Interactable* interactable = location->getInteractableAt(x, y);
-            if (interactable && std::ranges::find(nearby_interactables.begin(),
-                              nearby_interactables.end(),
-                              interactable) == nearby_interactables.end())
+            if (const Interactable* interactable = location->getInteractableAt(x, y))
                 nearby_interactables.push_back(interactable);
         }
     }
