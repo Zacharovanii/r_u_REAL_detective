@@ -1,27 +1,25 @@
 #pragma once
 #include <string>
-#include <vector>
 #include "helpers/Types.h"
 
 class Player {
-    size_t x, y;
-    int hp = 100;
+    Position position;
     std::string status = "Тестовый";
 
 public:
+    explicit Player(const Position& initial_position);
     Player(size_t x_, size_t y_);
 
     [[nodiscard]] size_t getX() const;
     [[nodiscard]] size_t getY() const;
 
-    void setPositionAt(const Position& position);
+    [[nodiscard]] Position getPosition() const;
+
+    void setX(size_t new_x);
+    void setY(size_t new_y);
+    void setPositionAt(const Position& new_position);
     void setPositionAt(size_t new_x, size_t new_y);
 
-    // void moveToLocation(const std::string& location_name, const Position& position);
-
-    // Старые методы можно оставить для совместимости или удалить
-    void moveUp(const std::vector<std::string>& map);
-    void moveDown(const std::vector<std::string>& map);
-    void moveLeft(const std::vector<std::string>& map);
-    void moveRight(const std::vector<std::string>& map);
+    std::string getStatus() const;
+    void setStatus(const std::string& new_status);
 };
