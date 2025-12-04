@@ -60,13 +60,7 @@ target_include_directories(game_lib PUBLIC
 )
 
 # ---- Копирование ресурсов ----
-if(PLATFORM_WINDOWS)
-    # Для Windows копируем в подпапку
-    set(DATA_DESTINATION "${CMAKE_BINARY_DIR}")
-else()
-    # Для Unix-like в текущую директорию
-    set(DATA_DESTINATION "${CMAKE_BINARY_DIR}")
-endif()
+set(DATA_DESTINATION "${CMAKE_BINARY_DIR}")
 
 # Создаем кастомную цель для копирования данных
 add_custom_target(copy_data ALL

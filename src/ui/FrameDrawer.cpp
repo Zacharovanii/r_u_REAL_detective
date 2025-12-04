@@ -1,15 +1,9 @@
 #include "ui/FrameDrawer.h"
 #include "ui/TerminalUtils.h"
 #include <iostream>
+#include <string>
 
-void FrameDrawer::drawFrame(int row, int col, int height, int width) {
-    const char* TL = "┌";
-    const char* TR = "┐";
-    const char* BL = "└";
-    const char* BR = "┘";
-    const char* H  = "─";
-    const char* V  = "│";
-
+void FrameDrawer::drawFrame(size_t row, size_t col, size_t height, size_t width) {
     TerminalUtils::moveCursor(row, col);
     std::cout << TL;
     for (int i = 0; i < width - 2; i++) std::cout << H;
@@ -29,19 +23,12 @@ void FrameDrawer::drawFrame(int row, int col, int height, int width) {
     std::cout << BR;
 }
 
-void FrameDrawer::drawFrame(int row, int col, int height, int width, const std::string& title) {
-    const char* TL = "┌";
-    const char* TR = "┐";
-    const char* BL = "└";
-    const char* BR = "┘";
-    const char* H  = "─";
-    const char* V  = "│";
-
+void FrameDrawer::drawFrame(size_t row, size_t col, size_t height, size_t width, const std::string& title) {
     TerminalUtils::moveCursor(row, col);
     std::cout << TL;
 
-    int availableSpace = width - 2;
-    int titleLength = static_cast<int>(title.length());
+    size_t availableSpace = width - 2;
+    size_t titleLength = title.length();
 
     // Если заголовок слишком длинный, обрезаем его
     std::string displayTitle = title;
@@ -50,13 +37,13 @@ void FrameDrawer::drawFrame(int row, int col, int height, int width, const std::
         titleLength = availableSpace - 2;
     }
 
-    int titlePos = (availableSpace - titleLength) / 2;
+    size_t titlePos = (availableSpace - titleLength) / 2;
 
     for (int i = 0; i < titlePos; i++) std::cout << H;
 
     std::cout << " " << displayTitle << " ";
 
-    int rightHCount = availableSpace - titlePos - titleLength - 2;
+    size_t rightHCount = availableSpace - titlePos - titleLength - 2;
     for (int i = 0; i < rightHCount; i++) std::cout << H;
 
     std::cout << TR;

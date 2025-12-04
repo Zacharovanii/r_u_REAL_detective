@@ -1,5 +1,4 @@
 #include "helpers/TermiosGuard.h"
-#include <iostream>
 
 #if PLATFORM_WINDOWS
 #include <conio.h>
@@ -27,7 +26,6 @@ TerminalGuard::TerminalGuard() {
     consoleMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     SetConsoleMode(hStdOut, consoleMode);
 #else
-    // Linux/macOS настройка (старый TermiosGuard)
     tcgetattr(STDIN_FILENO, &original_termios);
     struct termios new_termios = original_termios;
     new_termios.c_lflag &= ~(ICANON | ECHO);  // Неканонический режим, без эха

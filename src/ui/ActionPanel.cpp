@@ -7,86 +7,59 @@
 
 ActionPanel::ActionPanel(const Model& model) : model(model) {}
 
+void ActionPanel::draw(int row, int col, int width) const {
+    if (model.isInDialogue()) {
+        const Dialogue* dialogue = model.getDialogueManager().getCurrentDialogue();
+
+        if (const DialogueNode* node = dialogue ? dialogue->getCurrentNode() : nullptr) {
+            drawDialogue(row, col, width, node);
+        } else {
+            drawEmpty(row, col, width);
+        }
+
+    } else if (!model.getNearbyInteractables().empty()) {
+        drawInteractablesList(row, col, width);
+    } else {
+        drawEmpty(row, col, width);
+    }
+}
 
 void ActionPanel::drawInteractablesList(int row, int col, int width) const {
     const auto& interactables = model.getNearbyInteractables();
-
     // Вычисляем высоту: заголовок + по строке на каждый объект + подсказка
-    int height = 3 + interactables.size();
-
+    size_t height = 3 + interactables.size();
     FrameDrawer::drawFrame(row, col, height, width);
-
     // Заголовок
     TerminalUtils::moveCursor(row + 1, col + 2);
-    std::cout << "📡 Объекты рядом (" << interactables.size() << "):";
+    std::cout << "📡 Объектов рядом (" << interactables.size() << "):";
 
     // Список объектов с номерами
-    for (size_t i = 0; i < interactables.size(); ++i) {
+    for (int i = 0; i < interactables.size(); ++i) {
         const auto* interactable = interactables[i];
         TerminalUtils::moveCursor(row + 2 + i, col + 4);
-
-        // Форматируем строку: номер, имя, описание, расстояние
-        size_t player_x = model.getPlayer().getX();
-        size_t player_y = model.getPlayer().getY();
-        size_t dist_x = (interactable->getX() > player_x) ?
-                        interactable->getX() - player_x : player_x - interactable->getX();
-        size_t dist_y = (interactable->getY() > player_y) ?
-                        interactable->getY() - player_y : player_y - interactable->getY();
-        size_t distance = dist_x + dist_y;
-
-        std::cout << (i + 1) << ". " << interactable->getName();
-
+        // Форматируем строку: номер, имя, описание
+        std::cout << i + 1 << ". " << interactable->getName();
         // Если есть место, добавляем описание
         if (width > 30) {
             std::cout << " - " << interactable->getDescription();
         }
-
-        // Если есть место, добавляем расстояние
-        if (width > 40) {
-            std::cout << " [" << distance << " cells]";
-        }
     }
-
     // Подсказка управления
     TerminalUtils::moveCursor(row + height - 1, col + 2);
-    if (interactables.size() <= 9) {
+    if (interactables.size() != 1) {
         std::cout << "Нажмите 1-" << interactables.size() << " для взаимодействия";
     } else {
-        std::cout << "Используйте инвентарь для большего количества объектов";
+        std::cout << "Нажмите 1 для взаимодействия";
     }
 }
 
-void ActionPanel::draw(int row, int col, int width) const {
-    if (model.isInDialogue()) {
-        drawDialogue(row, col, width, model.getDialogueManager().getCurrentDialogue());
-    } else {
-        // Если есть интерактивные объекты рядом, показываем их список
-        if (!model.getNearbyInteractables().empty()) {
-            drawInteractablesList(row, col, width);
-        } else {
-            drawEmpty(row, col, width);
-        }
-    }
-}
-
-void ActionPanel::drawDialogue(int row, int col, int width, const Dialogue* dialogue) const {
-    if (!dialogue) {
-        drawEmpty(row, col, width);
-        return;
-    }
-
-    const DialogueNode* node = dialogue->getCurrentNode();
-    if (!node) {
-        drawEmpty(row, col, width);
-        return;
-    }
-
+void ActionPanel::drawDialogue(int row, int col, int width, const DialogueNode* node) {
     // Вычисляем высоту на основе содержимого
     int text_max_width = width - 4; // учитываем отступы по бокам
     std::vector<std::string> text_lines = wrapText(node->text, text_max_width);
-    int text_height = text_lines.size();
+    size_t text_height = text_lines.size();
 
-    int choices_height = 0;
+    size_t choices_height = 0;
     std::vector<std::vector<std::string>> choice_lines_list;
     for (const auto& choice : node->choices) {
         std::vector<std::string> choice_lines = wrapText(choice.text, text_max_width - 4); // учитываем номер и отступ
@@ -94,7 +67,7 @@ void ActionPanel::drawDialogue(int row, int col, int width, const Dialogue* dial
         choices_height += choice_lines.size();
     }
 
-    int height = 8 + text_height + choices_height; // заголовок + текст + варианты + управление
+    size_t height = 8 + text_height + choices_height; // заголовок + текст + варианты + управление
 
     FrameDrawer::drawFrame(row, col, height, width);
 
@@ -108,13 +81,13 @@ void ActionPanel::drawDialogue(int row, int col, int width, const Dialogue* dial
         std::cout << text_lines[i];
     }
 
-    int choices_start_row = row + 3 + text_height + 1;
+    size_t choices_start_row = row + 3 + text_height + 1;
 
     // Варианты ответов
     TerminalUtils::moveCursor(choices_start_row, col + 2);
     std::cout << "Ваши ответы:";
 
-    int current_choice_row = choices_start_row + 1;
+    size_t current_choice_row = choices_start_row + 1;
     for (size_t i = 0; i < node->choices.size(); ++i) {
         const auto& choice_lines = choice_lines_list[i];
         for (size_t j = 0; j < choice_lines.size(); ++j) {
@@ -130,12 +103,26 @@ void ActionPanel::drawDialogue(int row, int col, int width, const Dialogue* dial
 
     // Подсказка управления
     TerminalUtils::moveCursor(row + height - 1, col + 2);
-    std::cout << "Нажмите 1-" << node->choices.size() << " для выбора";
+    if (node->choices.size() != 1)
+        std::cout << "Нажмите 1-" << node->choices.size() << " для выбора";
+    else
+        std::cout << "Нажмите 1 для выбора";
+}
+
+void ActionPanel::drawEmpty(int row, int col, int width) {
+    int height = 8;
+    FrameDrawer::drawFrame(row, col, height, width);
+
+    int c = col + 2;
+    for (int r = 0; r < EMPTY_PANEL_LINES_COUNT; r++) {
+        TerminalUtils::moveCursor(row + r + 1, c);
+        std::cout << EMPTY_PANEL_TEXT[r];
+    }
 }
 
 
 // Вспомогательная функция для подсчета реальной ширины строки
-int ActionPanel::getStringWidth(const std::string& str) const {
+int ActionPanel::getStringWidth(const std::string& str) {
     int width = 0;
     for (size_t i = 0; i < str.length(); ) {
         unsigned char c = str[i];
@@ -154,7 +141,7 @@ int ActionPanel::getStringWidth(const std::string& str) const {
 }
 
 // Вспомогательная функция для переноса текста
-std::vector<std::string> ActionPanel::wrapText(const std::string& text, int max_width) const {
+std::vector<std::string> ActionPanel::wrapText(const std::string& text, int max_width) {
     std::vector<std::string> lines;
     std::string current_line;
 
@@ -180,21 +167,4 @@ std::vector<std::string> ActionPanel::wrapText(const std::string& text, int max_
     }
 
     return lines;
-}
-
-void ActionPanel::drawEmpty(int row, int col, int width) const {
-    int height = 6;
-    FrameDrawer::drawFrame(row, col, height, width);
-
-    TerminalUtils::moveCursor(row + 1, col + 2);
-    std::cout << "Действия:";
-
-    TerminalUtils::moveCursor(row + 2, col + 2);
-    std::cout << "Подойдите к персонажу";
-
-    TerminalUtils::moveCursor(row + 3, col + 2);
-    std::cout << "для начала диалога";
-
-    TerminalUtils::moveCursor(row + 4, col + 2);
-    std::cout << "Управление: WASD";
 }

@@ -44,7 +44,7 @@ void Controller::run() const {
     TerminalUtils::clearScreen();
 }
 
-std::optional<size_t> Controller::charToIndex(char ch) const {
+std::optional<size_t> Controller::charToIndex(char ch) {
     if (ch >= '1' && ch <= '9')  return static_cast<size_t>(ch - '1'); // преобразуем '1' в 0, '2' в 1 и т.д
     return std::nullopt;
 }

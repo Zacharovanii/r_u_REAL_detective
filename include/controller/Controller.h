@@ -12,7 +12,7 @@ private:
     void handleDialogueInput(size_t choice) const;
     void handleInteractionChoice(size_t ch) const;
 
-    std::optional<size_t> charToIndex(char ch) const;
+    [[nodiscard]] static std::optional<size_t> charToIndex(char ch);
 
 public:
     Controller(Model &m, View &v);
