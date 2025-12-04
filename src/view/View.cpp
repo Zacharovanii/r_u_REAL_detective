@@ -16,7 +16,7 @@ View::~View() {
 }
 
 void View::draw() const {
-    int rows, cols;
+    size_t rows, cols;
     TerminalUtils::getTerminalSize(rows, cols);
     TerminalUtils::clearScreen();
 
