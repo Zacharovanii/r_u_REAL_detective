@@ -6,6 +6,7 @@
 #include "ui/FrameDrawer.h"
 #include "ui/TerminalUtils.h"
 #include "ui/styles/TextStyles.h"
+#include "ui/ActionPanelLayout.h"
 
 class PanelComponents {
 public:
