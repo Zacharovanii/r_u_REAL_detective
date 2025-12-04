@@ -1,36 +1,23 @@
-#include <termios.h>
-#include <unistd.h>
-#include <iostream>
+#include "helpers/TermiosGuard.h"
 #include "controller/Controller.h"
 #include "ui/TerminalUtils.h"
 #include "helpers/Types.h"
 
-using namespace std;
 
-struct TermiosGuard {
-    termios old_terminal;
-    TermiosGuard() {
-        tcgetattr(STDIN_FILENO, &old_terminal);
-        termios newt = old_terminal;
-        newt.c_lflag &= ~(ICANON | ECHO);
-        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    }
-    ~TermiosGuard() {
-        tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
-    }
-};
-
-Controller::Controller(Model &m, View &v) : model(m), view(v) {}
+Controller::Controller(Model &m, View &v) :
+                        model(m), view(v)
+{}
 
 void Controller::run() const {
-    TermiosGuard guard;
+    TerminalGuard guard;
+    TerminalUtils::init();
     view.draw();
 
     constexpr char ESC = '\033';
     char ch;
 
     do {
-        ch = getchar();
+        ch = TerminalUtils::readChar();
         bool isInDialogue = model.getDialogueManager().isInDialogue();
 
 
@@ -38,20 +25,28 @@ void Controller::run() const {
             break;
         } else if (isInDialogue) {
             if (ch == 'q') model.getDialogueManager().endDialogue();
-            else if (ch >= '1' && ch <= '9') handleDialogueInput(ch);
-        } else if (ch >= '1' && ch <= '9') {
-            handleInteractionChoice(ch);
+            else if (auto choice = charToIndex(ch)) {
+                handleDialogueInput(choice.value());
+            }
+        } else if (auto choice = charToIndex(ch)) {
+            handleInteractionChoice(choice.value());
         } else {
             handleExplorationInput(ch);
         }
 
-
-        model.update();
-        if (ch) view.draw();
+        if (ch) {
+            model.update();
+            view.draw();
+        }
     }
     while (ch != ESC);
 
     TerminalUtils::clearScreen();
+}
+
+std::optional<size_t> Controller::charToIndex(char ch) const {
+    if (ch >= '1' && ch <= '9')  return static_cast<size_t>(ch - '1'); // преобразуем '1' в 0, '2' в 1 и т.д
+    return std::nullopt;
 }
 
 void Controller::handleExplorationInput(char ch) const {
@@ -64,12 +59,10 @@ void Controller::handleExplorationInput(char ch) const {
     }
 }
 
-void Controller::handleInteractionChoice(char ch) const {
-    size_t index = ch - '1';
+void Controller::handleInteractionChoice(size_t index) const {
     model.interactWithNearby(index);
 }
 
-void Controller::handleDialogueInput(char ch) const {
-    size_t choice = ch - '1'; // преобразуем '1' в 0, '2' в 1 и т.д.
+void Controller::handleDialogueInput(size_t choice) const {
     model.getDialogueManager().makeChoice(choice);
 }
