@@ -10,18 +10,18 @@ Object::Object(
 std::string Object::getName() const { return name; }
 std::string Object::getDescription() const { return description; }
 
-size_t Object::getX() const { return position.first; }
-size_t Object::getY() const { return position.second; }
+size_t Object::getX() const { return position.x; }
+size_t Object::getY() const { return position.y; }
 
-void Object::setX(size_t new_value) { position.first = new_value; }
-void Object::setY(size_t new_value) { position.second = new_value; }
+void Object::setX(size_t new_value) { position.x = new_value; }
+void Object::setY(size_t new_value) { position.y = new_value; }
 
 Position Object::getPosition() const { return position; }
 void Object::setPosition(const Position& new_pos) { position = new_pos; }
 
 bool Object::isIntersect(const Position& pos) const {
-    return position.first == pos.first && position.second == pos.second;
+    return position.x == pos.x && position.y == pos.y;
 }
 bool Object::isIntersect(size_t x, size_t y) const {
-    return position.first == x && position.second == y;
+    return position.x == x && position.y == y;
 }

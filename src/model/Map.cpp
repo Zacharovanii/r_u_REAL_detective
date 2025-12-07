@@ -43,7 +43,7 @@ void Map::interactAt(size_t x, size_t y) {
 }
 
 
-void Map::interactWithDoorAt(Player& player, size_t x, size_t y) {
+void Map::triggerDoorAt(Player& player, size_t x, size_t y) {
     Location* current = getCurrentLocation();
     if (!current) return;
 

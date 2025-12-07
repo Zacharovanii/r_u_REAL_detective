@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include <map>
 #include "helpers/Types.h"
 #include "objects/Door.h"
 #include "objects/Interactable.h"
@@ -15,15 +14,9 @@ private:
     std::string name;
     std::string filename;
 
-    // Кэш для быстрого поиска интерактивных объектов по позиции
-    mutable std::map<Position, Interactable*> interactable_cache;
-    mutable bool cache_dirty = true;
-
-    void rebuildCache() const;
-
 public:
     Location() = default;
-    Location(const MapTiles& data, const std::string& name, const std::string& filename);
+    Location(MapTiles data, std::string name, std::string filename);
 
     // Удаляем копирование (из-за unique_ptr)
     Location(const Location&) = delete;

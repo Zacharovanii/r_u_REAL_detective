@@ -1,5 +1,4 @@
-#include "../../../include/model/objects/NPC.h"
-#include "model/dialogue/DialogueManager.h"
+#include "model/objects/NPC.h"
 
 NPC::NPC(
     const Position& initial_pos,

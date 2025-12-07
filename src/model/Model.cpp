@@ -27,29 +27,24 @@ void Model::movePlayer(Direction direction) {
     const Location* location = getCurrentLocation();
     if (!location) return;
 
-    auto [dx, dy] = offset(direction);
+    Offset pos_offset = getOffsetFor(direction);
+    int nx = static_cast<int>(player.getX()) + pos_offset.dx;
+    int ny = static_cast<int>(player.getY()) + pos_offset.dy;
 
-    // Безопасное преобразование и вычисление
-    ptrdiff_t new_x = static_cast<ptrdiff_t>(player.getX()) + dx;
-    ptrdiff_t new_y = static_cast<ptrdiff_t>(player.getY()) + dy;
-
-    // Защита от отрицательных координат
-    if (new_x < 0 || new_y < 0) {
+    if (nx < 0 || ny < 0) {
         return;
     }
 
-    auto final_x = static_cast<size_t>(new_x);
-    auto final_y = static_cast<size_t>(new_y);
-
-    if (location->canMoveTo(final_x, final_y)) {
-        player.setPositionAt(final_x, final_y);
+    Position new_pos = {static_cast<size_t>(nx), static_cast<size_t>(ny)};
+    if (location->canMoveTo(new_pos.x, new_pos.y)) {
+        player.setPositionAt(new_pos);
         scanAroundPlayer();
     }
 }
 
 
 void Model::update() {
-    game_map.interactWithDoorAt(player, player.getX(), player.getY());
+    game_map.triggerDoorAt(player, player.getX(), player.getY());
 
     size_t x = player.getX();
     size_t y = player.getY();

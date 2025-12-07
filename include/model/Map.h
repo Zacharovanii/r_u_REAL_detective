@@ -22,5 +22,5 @@ public:
     bool changeLocation(const std::string& new_location);
 
     void interactAt(size_t x, size_t y);
-    void interactWithDoorAt(Player& player, size_t x, size_t y);
+    void triggerDoorAt(Player& player, size_t x, size_t y);
 };

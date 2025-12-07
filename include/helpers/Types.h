@@ -1,16 +1,26 @@
 #pragma once
-#include <utility>
 #include <string>
 #include <vector>
-#include <cstddef>
 
-using Position = std::pair<size_t, size_t>;
-using pos_diff = std::pair<ptrdiff_t, ptrdiff_t>;
+struct Position {
+    size_t x;
+    size_t y;
+
+    bool operator==(const Position& other) const {
+        return this->x == other.x && this->y == other.y;
+    }
+};
+
+struct Offset {
+    int dx;
+    int dy;
+};
+
 using MapTiles = std::vector<std::string>;
 
 enum class Direction { UP, DOWN, LEFT, RIGHT };
 
-constexpr pos_diff offset(Direction dir) {
+constexpr Offset getOffsetFor(Direction dir) {
     switch (dir) {
     case Direction::UP:    return {0, -1};
     case Direction::DOWN:  return {0, 1};
