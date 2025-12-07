@@ -1,0 +1,32 @@
+#pragma once
+#include <string>
+#include "helpers/Types.h"
+
+class Object {
+protected:
+    Position position;
+    std::string name;
+    std::string description;
+
+public:
+    Object(
+        const Position& initial_pos,
+        const std::string& name,
+        const std::string& description
+        );
+    virtual ~Object() = default;
+
+    [[nodiscard]] std::string getName() const;
+    [[nodiscard]] std::string getDescription() const;
+
+    [[nodiscard]] bool isIntersect(const Position& pos) const;
+    [[nodiscard]] bool isIntersect(size_t x, size_t y) const;
+
+    [[nodiscard]] size_t getX() const;
+    [[nodiscard]] size_t getY() const;
+    void setX(size_t new_value);
+    void setY(size_t new_value);
+
+    [[nodiscard]] Position getPosition() const;
+    void setPosition(const Position& new_pos);
+};

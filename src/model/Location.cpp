@@ -74,9 +74,9 @@ bool Location::hasInteractableAt(size_t x, size_t y) const {
     return getInteractableAt(x, y) != nullptr;
 }
 
-void Location::interactAt(Player& player, size_t x, size_t y) {
+void Location::interactAt(size_t x, size_t y) {
     if (auto* interactable = getInteractableAt(x, y)) {
-        interactable->interact(player);
+        interactable->interact();
     }
 }
 

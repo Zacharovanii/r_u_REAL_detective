@@ -2,11 +2,12 @@
 #include <string>
 #include <vector>
 #include <array>
-#include "model/objects/Interactable.h"
+#include "model/objects/Object.h"
 #include "ui/FrameDrawer.h"
 #include "ui/TerminalUtils.h"
 #include "ui/styles/TextStyles.h"
 #include "ui/ActionPanelLayout.h"
+#include "model/objects/Interactable.h"
 
 class PanelComponents {
 public:
@@ -61,7 +62,7 @@ private:
     };
 
     // Стили для разных типов текста
-    static TextStyles::Color getColorForItemType(const Interactable* item);
-    static std::string applyItemStyle(const Interactable* item,
+    static TextStyles::Color getColorForItemType(const Object* item);
+    static std::string applyItemStyle(const Object* item,
                                      const std::string& text);
 };

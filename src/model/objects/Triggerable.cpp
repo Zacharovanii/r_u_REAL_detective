@@ -1,6 +1,6 @@
-#include "model/objects/Interactable.h"
+#include "model/objects/Triggerable.h"
 
-Interactable::Interactable(
+Triggerable::Triggerable(
     const Position& initial_pos,
     const std::string& name,
     const std::string& description

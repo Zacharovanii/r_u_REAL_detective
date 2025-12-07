@@ -21,7 +21,6 @@ public:
 
     bool changeLocation(const std::string& new_location);
 
-    void interactAt(Player& player, size_t x, size_t y);
-    // Для взаимодействия с дверьми
+    void interactAt(size_t x, size_t y);
     void interactWithDoorAt(Player& player, size_t x, size_t y);
 };

@@ -1,16 +1,20 @@
-#include <iostream>
 #include "model/objects/Door.h"
 #include "model/Player.h"
 
-Door::Door(const Position& initial_pos, const std::string& name, const std::string& description,
-         const std::string& target_location, const Position& target_pos, bool open) :
-        Interactable(initial_pos, name, description),
+Door::Door(
+    const Position& initial_pos,
+    const std::string& name,
+    const std::string& description,
+    std::string target_location,
+    Position target_pos,
+    bool open) :
+        Triggerable(initial_pos, name, description),
         target_location(std::move(target_location)),
-        target_pos(target_pos),
+        target_pos(std::move(target_pos)),
         is_open(open)
 {};
 
-void Door::interact(Player& player) {
+void Door::trigger(Player& player) {
     if (is_open) {
         player.setPositionAt(getTargetPosition());
     }

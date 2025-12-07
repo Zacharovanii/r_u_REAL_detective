@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "model/objects/Interactable.h"
+
 // ==================== ИНИЦИАЛИЗАЦИЯ ====================
 
 void PanelComponents::initStyles() {
@@ -211,13 +213,13 @@ void PanelComponents::drawInteractiveItem(int row, int col,
 
 // ==================== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ====================
 
-TextStyles::Color PanelComponents::getColorForItemType(const Interactable* item) {
+TextStyles::Color PanelComponents::getColorForItemType(const Object* item) {
     // Можно расширить для разных типов объектов
     // Например: NPC - синий, Предмет - зелёный, Дверь - жёлтый и т.д.
     return TextStyles::Theme::Interactive;
 }
 
-std::string PanelComponents::applyItemStyle(const Interactable* item,
+std::string PanelComponents::applyItemStyle(const Object* item,
                                            const std::string& text) {
     return TextStyles::styled(text,
                              getColorForItemType(item),

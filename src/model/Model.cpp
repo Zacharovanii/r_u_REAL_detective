@@ -54,7 +54,7 @@ void Model::update() {
     size_t x = player.getX();
     size_t y = player.getY();
     if (game_map.getCurrentLocation()->hasInteractableAt(x, y)) {
-        game_map.interactAt(player, x, y);
+        game_map.interactAt(x, y);
     }
 }
 
@@ -88,7 +88,5 @@ void Model::interactWithNearby(size_t index) {
         return;
     }
     const Interactable* interactable = nearby_interactables[index];
-    // Нужно снять const для вызова неконстантного метода interact()
-    // Безопасно, так как мы владеем объектом
-    const_cast<Interactable*>(interactable)->interact(player);
+    const_cast<Interactable*>(interactable)->interact();
 }

@@ -53,5 +53,5 @@ public:
     [[nodiscard]] bool hasDoorAt(size_t x, size_t y) const;
 
     [[nodiscard]] bool canMoveTo(size_t x, size_t y) const;
-    void interactAt(Player& player, size_t x, size_t y);
+    void interactAt(size_t x, size_t y);
 };

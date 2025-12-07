@@ -1,13 +1,14 @@
 #pragma once
 #include "Object.h"
+#include "model/Player.h"
 
-class Interactable : public Object {
+class Triggerable : public Object {
 public:
-    Interactable(
+    Triggerable(
         const Position& initial_pos,
         const std::string& name,
         const std::string& description
         );
 
-    virtual void interact() = 0;
+    virtual void trigger(Player& player) = 0;
 };

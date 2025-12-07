@@ -1,7 +1,7 @@
 #pragma once
-#include "Interactable.h"
 #include <string>
 #include <functional>
+#include "Interactable.h"
 
 class NPC : public Interactable {
 private:
@@ -13,11 +13,11 @@ public:
     NPC(const Position& initial_pos,
         const std::string& name,
         const std::string& description,
-        const std::string& attitude,
-        const std::string& dialogue_id,
+        std::string attitude,
+        std::string dialogue_id,
         const std::function<void(const std::string&)>& start_dialogue_callback);
 
-    void interact(Player& player) override;
+    void interact() override;
 
     std::string getDialogueId() const;
     std::string getAttitude() const;

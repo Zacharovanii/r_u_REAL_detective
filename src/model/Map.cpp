@@ -36,9 +36,9 @@ bool Map::changeLocation(const std::string& new_location) {
     return false;
 }
 
-void Map::interactAt(Player& player, size_t x, size_t y) {
+void Map::interactAt(size_t x, size_t y) {
     if (Location* current = getCurrentLocation()) {
-        current->interactAt(player, x, y);
+        current->interactAt(x, y);
     }
 }
 
@@ -49,6 +49,6 @@ void Map::interactWithDoorAt(Player& player, size_t x, size_t y) {
 
     if (Door* door = current->getDoorAt(x, y)) {
         changeLocation(door->getTargetLocation());
-        door->interact(player);
+        door->trigger(player);
     }
 }
