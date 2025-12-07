@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "helpers/Types.h"
+#include "styles/TextStyles.h"
 
 class FrameDrawer {
 private:
@@ -12,5 +14,13 @@ private:
 
 public:
     static void drawFrame(size_t row, size_t col, size_t height, size_t width);
-    static void drawFrame(size_t row, size_t col, size_t height, size_t width, const std::string& title);
+    static void drawFrame(PanelMetrics pm);
+    static void drawTitle(PanelMetrics pm, const std::string& title);
+    static void drawTitle(PanelMetrics pm, const StyledText& title);
+    static void drawHint(PanelMetrics pm, const std::string& hint);
+
+    static void drawFrameWithTitle(PanelMetrics pm, const std::string& title);
+    static void drawFrameWithTitle(PanelMetrics pm, const StyledText& title);
+    static void drawFrameWithHint(PanelMetrics pm, const std::string& hint);
+    static void drawFrameWithTitleAndHint(PanelMetrics pm, const std::string& title, const std::string& hint);
 };

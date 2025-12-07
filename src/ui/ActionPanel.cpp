@@ -1,97 +1,78 @@
 #include "ui/ActionPanel.h"
+#include "ui/TerminalUtils.h"
+#include "ui/FrameDrawer.h"
+#include "helpers/TextWrapper.h"
 #include <iostream>
-#include <sstream>
 
-ActionPanel::ActionPanel(Model& model) : model(model) {
-    static bool stylesInitialized = false;
-    if (!stylesInitialized) {
-        PanelComponents::initStyles();
-        stylesInitialized = true;
-    }
-}
+ActionPanel::ActionPanel(Model& model) : model(model) {}
 
-void ActionPanel::draw(int row, int col, int width) const {
-    if (width <= 0 || row < 0 || col < 0) {
-        return;
-    }
+void ActionPanel::draw(const PanelMetrics& pm) const {
+    TerminalUtils::moveCursor(pm.row, pm.col);
+    TerminalUtils::moveCursor(pm.row + 2, pm.col + 1);
 
     if (model.isInDialogue()) {
-        const Dialogue* dialogue = model.getDialogueManager().getCurrentDialogue();
-        if (const DialogueNode* node = dialogue ? dialogue->getCurrentNode() : nullptr) {
-            drawDialogue(row, col, width, node);
-        } else {
-            drawEmpty(row, col, width);
-        }
+        drawDialogue(pm);
     } else if (!model.getNearbyInteractables().empty()) {
-        drawInteractablesList(row, col, width);
+        drawNearbyItems(pm);
     } else {
-        drawEmpty(row, col, width);
+        drawEmpty(pm);
     }
 }
 
-void ActionPanel::drawInteractablesList(int row, int col, int width) const {
-    auto interactables = model.getNearbyInteractables();
+void ActionPanel::drawDialogue(PanelMetrics pm) const {
+    TerminalUtils::moveCursor(pm.row, pm.col);
+    auto dialogue = model.getDialogueManager().getCurrentDialogue();
+    auto node = dialogue->getCurrentNode();
+    StyledText title = {"Диалог с " + node->speaker, Color::BrightYellow, Style::Blink};
+    FrameDrawer::drawFrameWithTitle(pm, title);
 
-    if (interactables.empty()) {
-        drawEmpty(row, col, width);
-        return;
+    size_t s_row = pm.row + 1, s_col = pm.col + 2;
+    auto lines = TextWrapper::wrap(node->text, pm.width - 2);
+    for (const auto& line : lines) {
+        TerminalUtils::moveCursor(s_row, s_col);
+        std::cout << line;
+        s_row++;
     }
-
-    auto metrics = ActionPanelLayout::calculateInteractablesLayout(interactables.size());
-    bool showDescriptions = ActionPanelLayout::shouldShowDescription(width);
-
-    // Отрисовка
-    PanelComponents::drawPanelFrame(row, col, metrics.height, width);
-
-    // Заголовок с эмодзи
-    std::ostringstream title;
-    title << "Объектов рядом (" << interactables.size() << "):";
-    PanelComponents::drawTitle(row + 1, col + 2, title.str(), "📡");
-
-    // Список объектов
-    PanelComponents::drawNumberedList(row + 2, col + 4, interactables, showDescriptions);
-
-    // Подсказка управления (подсвечиваем важность)
-    PanelComponents::drawControlHint(row + static_cast<int>(metrics.height) - 1,
-                                    col + 2,
-                                    interactables.size(),
-                                    "взаимодействия",
-                                    true); // isImportant = true
+    s_row++;
+    s_col += 2;
+    auto items = node->choices;
+    auto item_count = items.size();
+    for (int i = 0; i < item_count; i++) {
+        TerminalUtils::moveCursor(s_row + i, s_col);
+        std::cout << i + 1 << ". " << items[i].text;
+    }
 }
 
-void ActionPanel::drawDialogue(int row, int col, int width, const DialogueNode* node) const {
-    if (!node) {
-        drawEmpty(row, col, width);
-        return;
+void ActionPanel::drawNearbyItems(PanelMetrics pm) const {
+    TerminalUtils::moveCursor(pm.row, pm.col);
+    StyledText title = {"Выбор взаимодействия", Color::BrightCyan, Style::Blink};
+    FrameDrawer::drawFrameWithTitle(pm, title);
+
+    size_t s_row = pm.row + 1, s_col = pm.col + 2;
+    TerminalUtils::moveCursor(s_row, s_col);
+    std::cout << "Нажмите 1-9 для выбора:";
+    s_row++;
+    s_col += 2;
+    auto items = model.getNearbyInteractables();
+    auto item_count = items.size();
+    for (int i = 0; i < item_count; i++) {
+        TerminalUtils::moveCursor(s_row + i, s_col);
+        std::cout << i + 1 << ". " << items[i]->getName() << ": " << items[i]->getDescription() ;
     }
-
-    auto layout = ActionPanelLayout::calculateDialogueLayout(node, width);
-
-    // Отрисовка
-    PanelComponents::drawPanelFrame(row, col, layout.totalHeight, width);
-
-    // Заголовок диалога с именем говорящего
-    PanelComponents::drawDialogueSpeaker(row + 1, col + 2, node->speaker);
-
-    // Текст диалога (обычный цвет)
-    PanelComponents::drawTextLines(row + 3, col + 2, layout.textLines,
-                                  TextStyles::Theme::NormalText);
-
-    // Заголовок вариантов ответа
-    const int choicesTitleRow = row + 3 + static_cast<int>(layout.textLines.size()) + 1;
-    PanelComponents::drawTitle(choicesTitleRow, col + 2, "Ваши ответы:");
-
-    // Варианты ответов (интерактивные)
-    PanelComponents::drawChoicesList(choicesTitleRow + 1, col + 4, layout.choicesData);
-
-    // Подсказка управления (подсвеченная)
-    const int hintRow = row + static_cast<int>(layout.totalHeight) - 1;
-    PanelComponents::drawControlHint(hintRow, col + 2,
-                                    node->choices.size(),
-                                    "выбора",
-                                    true); // isImportant = true
 }
 
-void ActionPanel::drawEmpty(int row, int col, int width) const {
-    PanelComponents::drawEmptyPanel(row, col, width);
+
+void ActionPanel::drawEmpty(const PanelMetrics& pm) const {
+    TerminalUtils::moveCursor(pm.row, pm.col);
+    StyledText title = {"Исследование", Color::BrightRed, Style::Blink};
+    FrameDrawer::drawFrameWithTitle(pm, title);
+
+    size_t s_row = pm.row + 1, s_col = pm.col + 2;
+    TerminalUtils::moveCursor(s_row, s_col);
+    std::cout << about[0];
+    s_col++;
+    for (int line = 1; line < 6; line++) {
+        TerminalUtils::moveCursor(s_row + line, s_col);
+        std::cout << about[line];
+    }
 }

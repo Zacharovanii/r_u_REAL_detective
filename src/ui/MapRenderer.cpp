@@ -51,7 +51,8 @@ void MapRenderer::draw(int row, int col, int radiusY, int radiusX) const {
     int height = radiusY * 2 + 1;
     int width  = radiusX * 2 + 1;
 
-    FrameDrawer::drawFrame(row, col, height + 2, width + 2, model.getCurrentLocationName());
+    PanelMetrics pm = {static_cast<size_t>(row), static_cast<size_t>(col), static_cast<size_t>(height + 2), static_cast<size_t>(width + 2)};
+    FrameDrawer::drawFrameWithTitle(pm, model.getCurrentLocationName());
     drawAreaAroundPlayer(row + 1, col + 1, radiusY, radiusX);
 }
 

@@ -21,12 +21,13 @@ void View::draw() const {
     TerminalUtils::getTerminalSize(rows, cols);
     TerminalUtils::clearScreen();
 
-    constexpr int RIGHT_WIDTH = 22;
-    const int rightCol = static_cast<int>(cols) - RIGHT_WIDTH - 1;  // Правый край
-    const int actionPanelWidth = rightCol - 2;
+    constexpr size_t RIGHT_WIDTH = 22;
+    const size_t rightCol = cols - RIGHT_WIDTH - 1;  // Правый край
+    const size_t actionPanelWidth = rightCol - 2;
+    PanelMetrics actionPanelMetrics = {1, 1, cols, actionPanelWidth};
 
     StatusPanel::draw(model, 12, rightCol, RIGHT_WIDTH + 1);
-    actionPanel.draw(1, 1, actionPanelWidth);
+    actionPanel.draw(actionPanelMetrics);
     mapRenderer.draw(1, rightCol, 4, 10);
 
     const auto& messages = DebugLog::instance().getMessages();

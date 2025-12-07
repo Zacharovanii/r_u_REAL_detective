@@ -11,6 +11,10 @@ struct Position {
     }
 };
 
+struct PanelMetrics {
+    size_t row, col, height, width;
+};
+
 struct Offset {
     int dx;
     int dy;
