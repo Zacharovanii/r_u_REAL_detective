@@ -3,9 +3,10 @@
 #include "ui/StatusPanel.h"
 #include "ui/ActionPanel.h"
 #include "ui/MapRenderer.h"
+#include "helpers/DebugLog.h"
 #include <iostream>
 
-View::View(const Model& m) : model(m), mapRenderer(m), actionPanel(m) {
+View::View(const Model& m) : model(m), mapRenderer(const_cast<Model&>(m)), actionPanel(m) {
     TerminalUtils::clearScreen();
     TerminalUtils::hideCursor();
 }
@@ -27,6 +28,15 @@ void View::draw() const {
     StatusPanel::draw(model, 12, rightCol, RIGHT_WIDTH + 1);
     actionPanel.draw(1, 1, actionPanelWidth);
     mapRenderer.draw(1, rightCol, 4, 10);
+
+    const auto& messages = DebugLog::instance().getMessages();
+    size_t debugStartRow = rows - messages.size() - 1;
+    size_t row = debugStartRow;
+    for (const auto& msg : messages) {
+        TerminalUtils::moveCursor(row++, 1);
+        std::cout << msg << std::string(cols - msg.size(), ' ');
+    }
+
 
     std::cout.flush();
 }
