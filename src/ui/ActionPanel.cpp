@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-ActionPanel::ActionPanel(const Model& model) : model(model) {
+ActionPanel::ActionPanel(Model& model) : model(model) {
     static bool stylesInitialized = false;
     if (!stylesInitialized) {
         PanelComponents::initStyles();
@@ -30,7 +30,7 @@ void ActionPanel::draw(int row, int col, int width) const {
 }
 
 void ActionPanel::drawInteractablesList(int row, int col, int width) const {
-    const auto& interactables = model.getNearbyInteractables();
+    auto interactables = model.getNearbyInteractables();
 
     if (interactables.empty()) {
         drawEmpty(row, col, width);

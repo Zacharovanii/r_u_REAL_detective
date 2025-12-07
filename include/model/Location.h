@@ -8,15 +8,14 @@
 
 class Location {
 private:
-    MapTiles tiles;
     std::vector<std::unique_ptr<Interactable>> interactables;
     std::vector<Door> doors;
+    MapTiles tiles;
     std::string name;
-    std::string filename;
 
 public:
     Location() = default;
-    Location(MapTiles data, std::string name, std::string filename);
+    Location(MapTiles data, std::string name);
 
     // Удаляем копирование (из-за unique_ptr)
     Location(const Location&) = delete;
@@ -28,23 +27,16 @@ public:
 
     [[nodiscard]] const MapTiles& getTiles() const;
     [[nodiscard]] const std::string& getName() const;
-    [[nodiscard]] const std::string& getFilename() const;
 
     [[nodiscard]] bool isInside(size_t x, size_t y) const;
     [[nodiscard]] bool isWall(size_t x, size_t y) const;
 
-    // --- Интерактивные объекты ---
     void addInteractable(std::unique_ptr<Interactable> interactable);
-    [[nodiscard]] Interactable* getInteractableAt(size_t x, size_t y);
-    [[nodiscard]] const Interactable* getInteractableAt(size_t x, size_t y) const;
+    [[nodiscard]] Interactable* getInteractableAt(Position pos) const;
     [[nodiscard]] bool hasInteractableAt(size_t x, size_t y) const;
 
-    // --- Двери (специальный тип интерактивных объектов) ---
     void addDoor(const Door& newDoor);
-    [[nodiscard]] Door* getDoorAt(size_t x, size_t y);
-    [[nodiscard]] const Door* getDoorAt(size_t x, size_t y) const;
-    [[nodiscard]] bool hasDoorAt(size_t x, size_t y) const;
+    [[nodiscard]] Door* getDoorAt(Position pos);
 
     [[nodiscard]] bool canMoveTo(size_t x, size_t y) const;
-    void interactAt(size_t x, size_t y);
 };

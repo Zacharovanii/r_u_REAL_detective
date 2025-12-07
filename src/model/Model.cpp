@@ -9,19 +9,14 @@ Model::Model() : player(1, 1){
     DialogueInitializer::initializeDialogues(dialogue_manager);
 }
 
-const Map& Model::getMap() const {return game_map;}
-const Player& Model::getPlayer() const {return player;}
+const Player& Model::getPlayer() const { return player; }
+Location* Model::getCurrentLocation() { return game_map.getCurrentLocation(); }
+const std::string& Model::getCurrentLocationName() const { return game_map.getCurrentLocationName(); }
 
-const Location* Model::getCurrentLocation() const {return game_map.getCurrentLocation();}
-const std::string& Model::getCurrentLocationName() const {return game_map.getCurrentLocationName();}
-
-const DialogueManager& Model::getDialogueManager() const { return dialogue_manager; }
 DialogueManager& Model::getDialogueManager() { return dialogue_manager; }
 bool Model::isInDialogue() const { return dialogue_manager.isInDialogue(); }
 
-const std::vector<const Interactable*>& Model::getNearbyInteractables() const {return nearby_interactables;}
-size_t Model::getDetectionRadius() const {return detection_radius;}
-void Model::setDetectionRadius(size_t radius) {detection_radius = radius;}
+std::vector<Interactable*> Model::getNearbyInteractables() const { return nearby_interactables; }
 
 void Model::movePlayer(Direction direction) {
     const Location* location = getCurrentLocation();
@@ -44,12 +39,12 @@ void Model::movePlayer(Direction direction) {
 
 
 void Model::update() {
-    game_map.triggerDoorAt(player, player.getX(), player.getY());
+    Location* location = getCurrentLocation();
+    if (!location) return;
 
-    size_t x = player.getX();
-    size_t y = player.getY();
-    if (game_map.getCurrentLocation()->hasInteractableAt(x, y)) {
-        game_map.interactAt(x, y);
+    if (Door* door = location->getDoorAt(player.getPosition())) {
+        game_map.changeLocation(door->getTargetLocation());
+        door->trigger(player);
     }
 }
 
@@ -59,7 +54,7 @@ size_t Model::getScanEnd(size_t n) const { return n + detection_radius; }
 void Model::scanAroundPlayer() {
     nearby_interactables.clear();
 
-    const Location* location = getCurrentLocation();
+    Location* location = getCurrentLocation();
     if (!location) return;
 
     size_t player_x = player.getX();
@@ -72,16 +67,16 @@ void Model::scanAroundPlayer() {
         for (size_t x = start_x; x <= end_x; ++x) {
             if (x == player_x && y == player_y) continue;
 
-            if (const Interactable* interactable = location->getInteractableAt(x, y))
+            if (Interactable* interactable = location->getInteractableAt({x, y}))
                 nearby_interactables.push_back(interactable);
         }
     }
 }
 
-void Model::interactWithNearby(size_t index) {
+void Model::interactWithNearby(size_t index) const {
     if (index >= nearby_interactables.size()) {
         return;
     }
-    const Interactable* interactable = nearby_interactables[index];
-    const_cast<Interactable*>(interactable)->interact();
+    Interactable* interactable = nearby_interactables[index];
+    interactable->interact();
 }

@@ -12,15 +12,6 @@ void PanelComponents::initStyles() {
     TextStyles::init();
 }
 
-// ==================== КОНСТАНТЫ ====================
-
-constexpr int PanelComponents::TITLE_INDENT;
-constexpr int PanelComponents::CONTENT_INDENT;
-constexpr int PanelComponents::PANEL_PADDING;
-constexpr size_t PanelComponents::EMPTY_PANEL_HEIGHT;
-
-constexpr std::array<const char*, 6> PanelComponents::EMPTY_PANEL_LINES;
-
 // ==================== ФРЕЙМ И ЗАГОЛОВОК ====================
 
 void PanelComponents::drawPanelFrame(int row, int col, size_t height, int width,
@@ -62,7 +53,7 @@ void PanelComponents::drawTextLines(int startRow, int startCol,
 // ==================== СПИСОК С НОМЕРАМИ ====================
 
 void PanelComponents::drawNumberedList(int startRow, int startCol,
-                                      const std::vector<const Interactable*>& items,
+                                      const std::vector<Interactable*>& items,
                                       bool showDescriptions) {
     for (size_t i = 0; i < items.size(); ++i) {
         TerminalUtils::moveCursor(startRow + static_cast<int>(i), startCol);

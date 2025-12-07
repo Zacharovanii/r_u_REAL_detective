@@ -45,7 +45,7 @@ static constexpr std::string_view colorOf(char tile) {
 }
 
 
-MapRenderer::MapRenderer(const Model& model) : model(model) { }
+MapRenderer::MapRenderer(Model& model) : model(model) { }
 
 void MapRenderer::draw(int row, int col, int radiusY, int radiusX) const {
     int height = radiusY * 2 + 1;
@@ -71,7 +71,7 @@ void MapRenderer::drawAreaAroundPlayer(int row, int col,
 void MapRenderer::drawTile(int row,     int col,
                            int radiusY, int radiusX,
                            int dy,      int dx) const {
-    const Location* location = model.getCurrentLocation();
+    Location* location = model.getCurrentLocation();
     if (!location) return;
 
     const auto& p = model.getPlayer();
@@ -96,13 +96,11 @@ void MapRenderer::drawTile(int row,     int col,
         return;
     }
 
-    // Проверяем, есть ли дверь на этой позиции
-    if (location->hasDoorAt(x, y)) {
-        const Door* door = location->getDoorAt(x, y);
-        if (door && door->isOpen()) {
-            std::cout << colorOf('D');  // Открытая дверь
+    if (auto* door = location->getDoorAt({x, y})) {
+        if (door->isOpen()) {
+            std::cout << colorOf('D');
         } else {
-            std::cout << colorOf('#');  // Закрытая дверь (как стена)
+            std::cout << colorOf('#');
         }
         return;
     }

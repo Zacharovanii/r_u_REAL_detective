@@ -15,12 +15,7 @@ public:
     void setCurrentLocation(const std::string& location_name);
 
     [[nodiscard]] Location* getCurrentLocation();
-    [[nodiscard]] const Location* getCurrentLocation() const;
-    [[nodiscard]] Location* getLocation(const std::string& name);
     [[nodiscard]] const std::string& getCurrentLocationName() const;
 
     bool changeLocation(const std::string& new_location);
-
-    void interactAt(size_t x, size_t y);
-    void triggerDoorAt(Player& player, size_t x, size_t y);
 };

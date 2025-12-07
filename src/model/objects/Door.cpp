@@ -10,7 +10,7 @@ Door::Door(
     bool open) :
         Triggerable(initial_pos, name, description),
         target_location(std::move(target_location)),
-        target_pos(std::move(target_pos)),
+        target_pos(target_pos),
         is_open(open)
 {};
 

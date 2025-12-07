@@ -35,13 +35,12 @@ DialogueLayout ActionPanelLayout::calculateDialogueLayout(const DialogueNode* no
         layout.choicesData.push_back({i + 1, std::move(lines)});
     }
 
-    // Рассчитываем общую высоту
     size_t textHeight = layout.textLines.size();
     size_t choicesHeight = 0;
     for (const auto& choice : layout.choicesData) {
         choicesHeight += choice.lines.size();
     }
 
-    layout.totalHeight = 8 + textHeight + choicesHeight; // базово 8 строк
+    layout.totalHeight = 8 + textHeight + choicesHeight;
     return layout;
 }

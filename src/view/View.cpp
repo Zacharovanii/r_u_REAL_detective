@@ -6,7 +6,7 @@
 #include "helpers/DebugLog.h"
 #include <iostream>
 
-View::View(const Model& m) : model(m), mapRenderer(const_cast<Model&>(m)), actionPanel(m) {
+View::View(const Model& m) : model(m), mapRenderer(const_cast<Model&>(m)), actionPanel(const_cast<Model&>(m)) {
     TerminalUtils::clearScreen();
     TerminalUtils::hideCursor();
 }

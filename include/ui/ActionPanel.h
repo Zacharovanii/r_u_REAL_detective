@@ -5,7 +5,7 @@
 
 class ActionPanel {
 private:
-    const Model& model;
+    Model& model;
 
     // Основные методы отрисовки панелей
     void drawInteractablesList(int row, int col, int width) const;
@@ -13,6 +13,6 @@ private:
     void drawEmpty(int row, int col, int width) const;
 
 public:
-    explicit ActionPanel(const Model& model);
+    explicit ActionPanel(Model& model);
     void draw(int row, int col, int width) const;
 };

@@ -27,7 +27,7 @@ public:
                              TextStyles::Style style = TextStyles::Style::Normal);
 
     static void drawNumberedList(int startRow, int startCol,
-                                const std::vector<const Interactable*>& items,
+                                const std::vector<Interactable*>& items,
                                 bool showDescriptions);
 
     static void drawChoicesList(int startRow, int startCol,

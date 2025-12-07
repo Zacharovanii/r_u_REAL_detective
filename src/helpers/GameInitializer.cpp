@@ -6,9 +6,9 @@
 
 void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager) {
     // Создаем и настраиваем локации
-    Location hotel_1f(MapLoader::loadByName("hotel_1f"), "Hotel First Floor", "hotel_1f");
-    Location hotel_2f(MapLoader::loadByName("hotel_2f"), "Hotel Second Floor", "hotel_2f");
-    Location street(MapLoader::loadByName("street"), "Street", "street");
+    Location hotel_1f(MapLoader::loadByName("hotel_1f"), "Hotel First Floor");
+    Location hotel_2f(MapLoader::loadByName("hotel_2f"), "Hotel Second Floor");
+    Location street(MapLoader::loadByName("street"), "Street");
 
     // Добавляем двери в локации
     // Дверь с 1 этажа на 2 этаж
