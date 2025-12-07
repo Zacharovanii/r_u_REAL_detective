@@ -1,10 +1,13 @@
 #include "model/objects/Object.h"
 
 Object::Object(
-    const Position& initial_pos,
-    const std::string& name,
-    const std::string& description
-    ) : position(initial_pos), name(name), description(description)
+    Position initial_pos,
+    std::string name,
+    std::string description
+    ) :
+    position(initial_pos),
+    name(std::move(name)),
+    description(std::move(description))
 {}
 
 std::string Object::getName() const { return name; }

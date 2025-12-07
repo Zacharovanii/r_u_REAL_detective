@@ -10,16 +10,16 @@ private:
     std::function<void(const std::string&)> start_dialogue_callback;
 
 public:
-    NPC(const Position& initial_pos,
-        const std::string& name,
-        const std::string& description,
+    NPC(Position initial_pos,
+        std::string name,
+        std::string description,
         std::string attitude,
         std::string dialogue_id,
         const std::function<void(const std::string&)>& start_dialogue_callback);
 
     void interact() override;
 
-    std::string getDialogueId() const;
-    std::string getAttitude() const;
+    [[nodiscard]] std::string getDialogueId() const;
+    [[nodiscard]] std::string getAttitude() const;
     void setAttitude(const std::string& new_attitude);
 };

@@ -14,7 +14,7 @@ private:
 
 public:
     Dialogue() = default;
-    Dialogue(const std::string& id);
+    explicit Dialogue(std::string id);
 
     void addNode(const DialogueNode& node);
     bool makeChoice(size_t choice_index);

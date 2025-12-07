@@ -37,7 +37,6 @@ void Model::movePlayer(Direction direction) {
     }
 }
 
-
 void Model::update() {
     Location* location = getCurrentLocation();
     if (!location) return;

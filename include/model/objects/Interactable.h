@@ -4,9 +4,9 @@
 class Interactable : public Object {
 public:
     Interactable(
-        const Position& initial_pos,
-        const std::string& name,
-        const std::string& description
+        Position initial_pos,
+        std::string name,
+        std::string description
         );
 
     virtual void interact() = 0;

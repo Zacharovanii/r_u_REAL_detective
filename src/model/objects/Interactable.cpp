@@ -1,7 +1,7 @@
 #include "model/objects/Interactable.h"
 
 Interactable::Interactable(
-    const Position& initial_pos,
-    const std::string& name,
-    const std::string& description
-    ) : Object(initial_pos, name, description) {}
+    Position initial_pos,
+    std::string name,
+    std::string description
+    ) : Object(initial_pos, std::move(name), std::move(description)) {}

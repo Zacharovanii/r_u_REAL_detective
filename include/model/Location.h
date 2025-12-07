@@ -28,14 +28,10 @@ public:
     [[nodiscard]] const MapTiles& getTiles() const;
     [[nodiscard]] const std::string& getName() const;
 
-    [[nodiscard]] bool isInside(size_t x, size_t y) const;
-    [[nodiscard]] bool isWall(size_t x, size_t y) const;
-
     void addInteractable(std::unique_ptr<Interactable> interactable);
-    [[nodiscard]] Interactable* getInteractableAt(Position pos) const;
-    [[nodiscard]] bool hasInteractableAt(size_t x, size_t y) const;
-
     void addDoor(const Door& newDoor);
+
+    [[nodiscard]] Interactable* getInteractableAt(Position pos) const;
     [[nodiscard]] Door* getDoorAt(Position pos);
 
     [[nodiscard]] bool canMoveTo(size_t x, size_t y) const;

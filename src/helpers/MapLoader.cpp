@@ -11,6 +11,9 @@ MapTiles MapLoader::load(const std::string& path) {
     std::string line;
 
     while (std::getline(file, line)) {
+        if (!line.empty() && line.back() == '\r')
+            line.pop_back();
+
         if (!line.empty())
             map.push_back(line);
     }

@@ -10,9 +10,9 @@ class Door : public Triggerable {
 
 public:
     Door(
-        const Position& initial_pos,
-        const std::string& name,
-        const std::string& description,
+        Position initial_pos,
+        std::string name,
+        std::string description,
         std::string target_location,
         Position target_pos,
         bool open = true);

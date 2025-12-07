@@ -2,17 +2,17 @@
 #include "model/Player.h"
 
 Door::Door(
-    const Position& initial_pos,
-    const std::string& name,
-    const std::string& description,
+    Position initial_pos,
+    std::string name,
+    std::string description,
     std::string target_location,
     Position target_pos,
     bool open) :
-        Triggerable(initial_pos, name, description),
+        Triggerable(initial_pos, std::move(name), std::move(description)),
         target_location(std::move(target_location)),
         target_pos(target_pos),
         is_open(open)
-{};
+{}
 
 void Door::trigger(Player& player) {
     if (is_open) {

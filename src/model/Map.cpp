@@ -5,7 +5,6 @@ void Map::addLocation(const std::string& name, Location location) {
 }
 
 const std::string& Map::getCurrentLocationName() const { return current_location;}
-
 Location* Map::getCurrentLocation() {
     if (current_location.empty()) return nullptr;
     return &locations[current_location];

@@ -1,7 +1,7 @@
 #include "model/dialogue/Dialogue.h"
 #include <iostream>
 
-Dialogue::Dialogue(const std::string& id) : dialogue_id(id) {}
+Dialogue::Dialogue(std::string id) : dialogue_id(std::move(id)) {}
 
 void Dialogue::callEnterFor(const DialogueNode& node) {
     if (node.on_enter) node.on_enter();

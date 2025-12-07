@@ -9,11 +9,9 @@
 
 class Model {
 private:
+    DialogueManager dialogue_manager;
     Player player;
     Map game_map;
-
-    DialogueManager dialogue_manager;
-
     std::vector<Interactable*> nearby_interactables;
     size_t detection_radius = 1;
 

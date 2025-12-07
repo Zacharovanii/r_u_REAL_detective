@@ -1,7 +1,6 @@
 #pragma once
 #include "helpers/Platform.h"
 
-// Кросс-платформенная замена TermiosGuard
 class TerminalGuard {
 private:
 #if PLATFORM_WINDOWS
