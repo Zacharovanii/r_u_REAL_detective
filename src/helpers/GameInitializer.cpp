@@ -30,16 +30,82 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
         true
     ));
 
+        // ========================= ДОБАВЛЕНИЕ ВСЕХ ПОДОЗРЕВАЕМЫХ NPC =========================
+    int startX = 15;
+    int y = 7;
+
+    // Х — Хозяин отеля
     hotel_1f.addInteractable(std::make_unique<NPC>(
-        Position(20, 4),
-        "Robert",
-        "The hotel receptionist",
-        "Suspicious",
-        "robert_dialogue",
+        Position(startX + 0, y),
+        "Роберт",
+        "Хозяин отеля",
+        "Angry",
+        "hotel_owner",
         [&dialogue_manager](const std::string& dialogue_id) {
             dialogue_manager.startDialogue(dialogue_id);
         }
     ));
+
+    // О — Охранник
+    hotel_1f.addInteractable(std::make_unique<NPC>(
+        Position(startX + 1, y),
+        "Виктор",
+        "Охранник",
+        "Aggressive",
+        "guard",
+        [&dialogue_manager](const std::string& dialogue_id) {
+            dialogue_manager.startDialogue(dialogue_id);
+        }
+    ));
+
+    // С — Стриптизёрша
+    hotel_1f.addInteractable(std::make_unique<NPC>(
+        Position(startX + 2, y),
+        "Стеффани",
+        "Стриптизёрша",
+        "Flirty",
+        "stripper",
+        [&dialogue_manager](const std::string& dialogue_id) {
+            dialogue_manager.startDialogue(dialogue_id);
+        }
+    ));
+
+    // Д — Слепой дед
+    hotel_1f.addInteractable(std::make_unique<NPC>(
+        Position(startX + 3, y),
+        "Димон",
+        "Слепой дед",
+        "Suspicious",
+        "blind_man",
+        [&dialogue_manager](const std::string& dialogue_id) {
+            dialogue_manager.startDialogue(dialogue_id);
+        }
+    ));
+
+    // П — Очкарик
+    hotel_1f.addInteractable(std::make_unique<NPC>(
+        Position(startX + 4, y),
+        "Френк",
+        "Постоялец",
+        "Nervous",
+        "fan",
+        [&dialogue_manager](const std::string& dialogue_id) {
+            dialogue_manager.startDialogue(dialogue_id);
+        }
+    ));
+
+    // Б — Бабушка
+    hotel_1f.addInteractable(std::make_unique<NPC>(
+        Position(startX + 5, y),
+        "Елизавета",
+        "Бабушка",
+        "Grumpy",
+        "granny",
+        [&dialogue_manager](const std::string& dialogue_id) {
+            dialogue_manager.startDialogue(dialogue_id);
+        }
+    ));
+
 
     // Дверь со 2 этажа на 1 этаж
     hotel_2f.addDoor(Door(

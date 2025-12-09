@@ -99,14 +99,13 @@ void MapRenderer::drawTile(int row,     int col,
 
     if (auto* door = location->getDoorAt({x, y})) {
         if (door->isOpen()) {
-            std::cout << colorOf('D');
+            std::cout << colorOf(tiles[y][x]);
         } else {
             std::cout << colorOf('#');
         }
         return;
     }
 
-    // Рисуем обычный тайл
     std::cout << colorOf(tiles[y][x]);
 }
 

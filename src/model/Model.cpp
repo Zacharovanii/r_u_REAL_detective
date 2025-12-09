@@ -6,7 +6,7 @@
 Model::Model() : player(1, 1){
     GameInitializer::initGameWorld(game_map, dialogue_manager);
     GameInitializer::loadStartLocation(game_map, player, "hotel_1f");
-    DialogueInitializer::initializeDialogues(dialogue_manager);
+    DialogueInitializer::initializeDialogues(dialogue_manager, player);
 }
 
 const Player& Model::getPlayer() const { return player; }

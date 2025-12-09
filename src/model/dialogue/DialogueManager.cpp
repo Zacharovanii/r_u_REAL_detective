@@ -15,7 +15,6 @@ void DialogueManager::startDialogue(const std::string& dialogue_id) {
 
 bool DialogueManager::makeChoice(size_t choice_index) {
     if (!isInDialogue()) return false;
-    
     bool result = current_dialogue->makeChoice(choice_index);
     if (current_dialogue->isFinished()) {
         current_dialogue = nullptr;

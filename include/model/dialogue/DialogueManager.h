@@ -1,5 +1,6 @@
 #pragma once
 #include "Dialogue.h"
+#include "model/Player.h"
 #include <unordered_map>
 
 class DialogueManager {

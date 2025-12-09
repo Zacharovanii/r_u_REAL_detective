@@ -31,19 +31,32 @@ bool Dialogue::makeChoice(size_t choice_index) {
     if (!node || choice_index >= node->choices.size()) {
         return false;
     }
-    
+
     const auto& choice = node->choices[choice_index];
-    if (choice.on_select) choice.on_select();
-    
+
+    // ✅ 1. Проверка через callback
+    if (choice.on_select) {
+        bool allowed = choice.on_select();
+        if (!allowed) {
+            // ✅ Переход в служебную ноду отказа
+            auto it = nodes.find("no_resources");
+            if (it != nodes.end()) {
+                current_node_id = "no_resources";
+                callEnterFor(getCurrentNode());
+            }
+            return false;
+        }
+    }
+
     if (choice.next_node_id.empty() || choice.next_node_id == "end") {
         end();
     } else {
         current_node_id = choice.next_node_id;
         callEnterFor(getCurrentNode());
     }
-    
     return true;
 }
+
 
 void Dialogue::end() {
     finished = true;
