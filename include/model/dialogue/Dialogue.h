@@ -1,5 +1,6 @@
 #pragma once
 #include "DialogueNode.h"
+#include "model/Player.h"
 #include <unordered_map>
 
 class Dialogue {
@@ -17,13 +18,13 @@ public:
     explicit Dialogue(std::string id);
 
     void addNode(const DialogueNode& node);
-    bool makeChoice(size_t choice_index);
+    bool makeChoice(size_t choice_index, Player& player);
     void start(const std::string& start_node_id);
     void end();
 
     bool isFinished() const { return finished; }
     bool isActive() const;
 
-    const DialogueNode* getCurrentNode() const;
+    DialogueNode* getCurrentNode();
     std::string getId() const { return dialogue_id; }
 };

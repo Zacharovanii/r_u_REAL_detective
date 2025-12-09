@@ -21,29 +21,24 @@ void Dialogue::start(const std::string& start_node_id) {
     callEnterFor(getCurrentNode());
 }
 
-const DialogueNode* Dialogue::getCurrentNode() const {
+DialogueNode* Dialogue::getCurrentNode() {
     auto it = nodes.find(current_node_id);
     return it != nodes.end() ? &it->second : nullptr;
 }
 
-bool Dialogue::makeChoice(size_t choice_index) {
+bool Dialogue::makeChoice(size_t choice_index, Player& player) {
     auto node = getCurrentNode();
     if (!node || choice_index >= node->choices.size()) {
         return false;
     }
 
-    const auto& choice = node->choices[choice_index];
+    auto& choice = node->choices[choice_index];
 
-    // ✅ 1. Проверка через callback
-    if (choice.on_select) {
-        bool allowed = choice.on_select();
-        if (!allowed) {
-            // ✅ Переход в служебную ноду отказа
-            auto it = nodes.find("no_resources");
-            if (it != nodes.end()) {
-                current_node_id = "no_resources";
-                callEnterFor(getCurrentNode());
-            }
+    if (choice.checkCondition(player))
+        choice.runAction(player);
+    else {
+        if (nodes.contains("no_resources")) {
+            current_node_id = "no_resources";
             return false;
         }
     }

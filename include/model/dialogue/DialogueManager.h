@@ -11,9 +11,9 @@ private:
 public:
     void registerDialogue(Dialogue&& dialogue);
     void startDialogue(const std::string& dialogue_id);
-    bool makeChoice(size_t choice_index);
+    bool makeChoice(size_t choice_index, Player& player);
     void endDialogue();
 
     bool isInDialogue() const;
-    const Dialogue* getCurrentDialogue() const;
+    Dialogue* getCurrentDialogue() const;
 };

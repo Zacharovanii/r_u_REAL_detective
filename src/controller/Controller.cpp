@@ -64,5 +64,5 @@ void Controller::handleInteractionChoice(size_t index) const {
 }
 
 void Controller::handleDialogueInput(size_t choice) const {
-    model.getDialogueManager().makeChoice(choice);
+    model.getDialogueManager().makeChoice(choice, const_cast<Player&>(model.getPlayer()));
 }
