@@ -21,6 +21,7 @@ struct Offset {
 };
 
 using MapTiles = std::vector<std::string>;
+using dialogueID = std::string;
 
 enum class Direction { UP, DOWN, LEFT, RIGHT };
 

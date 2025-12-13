@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "helpers/Types.h"
 
 class Interactable : public Object {
 public:
@@ -9,5 +10,5 @@ public:
         std::string description
         );
 
-    virtual void interact() = 0;
+    virtual dialogueID interact() = 0;
 };

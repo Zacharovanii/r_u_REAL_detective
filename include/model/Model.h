@@ -33,5 +33,5 @@ public:
 
     void scanAroundPlayer();
     std::vector<Interactable*> getNearbyInteractables() const;
-    void interactWithNearby(size_t index) const;
+    void interactWithNearby(size_t index);
 };

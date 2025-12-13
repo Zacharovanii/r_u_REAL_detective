@@ -40,10 +40,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
         "Роберт",
         "Хозяин отеля",
         "Angry",
-        "hotel_owner",
-        [&dialogue_manager](const std::string& dialogue_id) {
-            dialogue_manager.startDialogue(dialogue_id);
-        }
+        "hotel_owner"
     ));
 
     // О — Охранник
@@ -52,10 +49,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
         "Виктор",
         "Охранник",
         "Aggressive",
-        "guard",
-        [&dialogue_manager](const std::string& dialogue_id) {
-            dialogue_manager.startDialogue(dialogue_id);
-        }
+        "guard"
     ));
 
     // С — Стриптизёрша
@@ -64,10 +58,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
         "Стеффани",
         "Стриптизёрша",
         "Flirty",
-        "stripper",
-        [&dialogue_manager](const std::string& dialogue_id) {
-            dialogue_manager.startDialogue(dialogue_id);
-        }
+        "stripper"
     ));
 
     // Д — Слепой дед
@@ -76,10 +67,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
         "Димон",
         "Слепой дед",
         "Suspicious",
-        "blind_man",
-        [&dialogue_manager](const std::string& dialogue_id) {
-            dialogue_manager.startDialogue(dialogue_id);
-        }
+        "blind_man"
     ));
 
     // П — Очкарик
@@ -88,10 +76,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
         "Френк",
         "Постоялец",
         "Nervous",
-        "fan",
-        [&dialogue_manager](const std::string& dialogue_id) {
-            dialogue_manager.startDialogue(dialogue_id);
-        }
+        "fan"
     ));
 
     // Б — Бабушка
@@ -100,10 +85,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
         "Елизавета",
         "Бабушка",
         "Grumpy",
-        "granny",
-        [&dialogue_manager](const std::string& dialogue_id) {
-            dialogue_manager.startDialogue(dialogue_id);
-        }
+        "granny"
     ));
 
 

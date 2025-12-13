@@ -72,10 +72,10 @@ void Model::scanAroundPlayer() {
     }
 }
 
-void Model::interactWithNearby(size_t index) const {
+void Model::interactWithNearby(size_t index) {
     if (index >= nearby_interactables.size()) {
         return;
     }
     Interactable* interactable = nearby_interactables[index];
-    interactable->interact();
+    dialogue_manager.startDialogue(interactable->interact());
 }

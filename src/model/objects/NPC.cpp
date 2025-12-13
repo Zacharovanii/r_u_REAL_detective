@@ -5,20 +5,17 @@ NPC::NPC(
     std::string name,
     std::string description,
     std::string attitude,
-    std::string dialogue_id,
-    const std::function<void(const std::string&)>& start_dialogue_callback
-    ) : Interactable(initial_pos, std::move(name), std::move(description)),
-      attitude(std::move(attitude)),
-      dialogue_id(std::move(dialogue_id)),
-      start_dialogue_callback(start_dialogue_callback)
+    std::string dialogue_id
+):
+    Interactable(initial_pos, std::move(name), std::move(description)),
+    attitude(std::move(attitude)),
+    dialogue_id(std::move(dialogue_id))
 {}
 
 std::string NPC::getDialogueId() const { return dialogue_id; }
 std::string NPC::getAttitude() const { return attitude; }
 void NPC::setAttitude(const std::string& new_attitude) { attitude = new_attitude; }
 
-void NPC::interact() {
-    if (start_dialogue_callback) {
-        start_dialogue_callback(dialogue_id);
-    }
+dialogueID NPC::interact() {
+    return dialogue_id;
 }
