@@ -17,5 +17,10 @@ std::string NPC::getAttitude() const { return attitude; }
 void NPC::setAttitude(const std::string& new_attitude) { attitude = new_attitude; }
 
 dialogueID NPC::interact() {
-    return dialogue_id;
+    if (alreadyTalked) {
+        return "already_talked";
+    } else {
+        alreadyTalked = true;
+        return dialogue_id;
+    }
 }

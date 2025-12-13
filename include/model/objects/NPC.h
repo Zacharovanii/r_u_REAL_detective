@@ -6,6 +6,7 @@ class NPC : public Interactable {
 private:
     std::string attitude;
     std::string dialogue_id;
+    bool alreadyTalked = false;
 
 public:
     NPC(Position initial_pos,

@@ -66,7 +66,18 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager, Player& 
     hotelOwner.addNode(no_resources);
     hotelOwner.addNode(end);
 
+    Dialogue alreadyTalked("already_talked");
+    DialogueNode at_start;
+    at_start
+        .id("start")
+        ->speaker("Хозяин отеля")
+        ->text("Вы уже распросили этого персонажа")
+        ->choice({"Уйти", "end"});
+    alreadyTalked.addNode(at_start);
+    alreadyTalked.addNode(end);
+
     manager.registerDialogue(std::move(hotelOwner));
+    manager.registerDialogue(std::move(alreadyTalked));
 
     // ========================= ОХРАННИК (О) =========================
     // Dialogue guard("guard");
