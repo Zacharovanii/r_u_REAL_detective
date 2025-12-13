@@ -22,12 +22,6 @@ void Player::setPositionAt(const Position& new_position) {
     position = new_position;
 }
 
-std::string Player::getStatus() const { return status; }
-
-void Player::setStatus(const std::string& new_status) {
-    status = new_status;
-}
-
 int Player::getBadges() const { return badges; }
 int Player::getMoney()  const { return money; }
 int Player::getHealth() const { return health; }
