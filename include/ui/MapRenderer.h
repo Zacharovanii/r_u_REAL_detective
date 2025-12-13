@@ -1,17 +1,16 @@
 #pragma once
 #include "model/Model.h"
+#include "helpers/Types.h"
 
 class MapRenderer {
 public:
     explicit MapRenderer(Model& model);
-
-    void draw(int row, int col, int radiusY, int radiusX) const;
-    void draw(int row, int col, int radius) const;
+    void draw(const PanelMetrics& pm, int radiusY, int radiusX) const;
 
 private:
     Model& model;
 
-    void drawTile(int row, int col, int radiusY, int radiusX, int dy, int dx) const;
-    void drawAreaAroundPlayer(int row, int col, int radiusY, int radiusX) const;
+    void drawAreaAroundPlayer(const PanelMetrics& pm, int radiusY, int radiusX) const;
+    void drawTile(int dy, int dx) const;
     [[nodiscard]] bool isValidPosition(int y, int x) const;
 };

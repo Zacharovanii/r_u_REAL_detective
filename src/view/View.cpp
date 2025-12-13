@@ -3,10 +3,14 @@
 #include "ui/StatusPanel.h"
 #include "ui/ActionPanel.h"
 #include "ui/MapRenderer.h"
-#include "helpers/DebugLog.h"
 #include <iostream>
 
-View::View(const Model& m) : model(m), mapRenderer(const_cast<Model&>(m)), actionPanel(const_cast<Model&>(m)) {
+View::View(Model& m)
+    :
+    model(m),
+    statusPanel(m),
+    mapRenderer(m),
+    actionPanel(m) {
     TerminalUtils::clearScreen();
     TerminalUtils::hideCursor();
 }
@@ -22,22 +26,27 @@ void View::draw() const {
     TerminalUtils::clearScreen();
 
     constexpr size_t RIGHT_WIDTH = 22;
-    const size_t rightCol = cols - RIGHT_WIDTH - 1;  // Правый край
+    const size_t rightCol = cols - RIGHT_WIDTH - 1;
     const size_t actionPanelWidth = rightCol - 2;
-    PanelMetrics actionPanelMetrics = {1, 1, cols, actionPanelWidth};
 
-    StatusPanel::draw(model, 12, rightCol, RIGHT_WIDTH + 1);
-    actionPanel.draw(actionPanelMetrics);
-    mapRenderer.draw(1, rightCol, 4, 10);
+    constexpr int radiusY = 4;
+    constexpr int radiusX = 10;
 
-    const auto& messages = DebugLog::instance().getMessages();
-    size_t debugStartRow = rows - messages.size() - 1;
-    size_t row = debugStartRow;
-    for (const auto& msg : messages) {
-        TerminalUtils::moveCursor(row++, 1);
-        std::cout << msg << std::string(cols - msg.size(), ' ');
-    }
+    PanelMetrics statusPM = {12, rightCol, 10, radiusX * 2 + 3};
+    PanelMetrics actionPM = {1, 1, cols, actionPanelWidth};
+    PanelMetrics mapPM = {1, rightCol, radiusY * 2 + 3, radiusX * 2 + 3};
 
+    statusPanel.draw(statusPM);
+    actionPanel.draw(actionPM);
+    mapRenderer.draw(mapPM, radiusY, radiusX);
+
+    // const auto& messages = DebugLog::instance().getMessages();
+    // size_t debugStartRow = rows - messages.size() - 1;
+    // size_t row = debugStartRow;
+    // for (const auto& msg : messages) {
+    //     TerminalUtils::moveCursor(row++, 1);
+    //     std::cout << msg << std::string(cols - msg.size(), ' ');
+    // }
 
     std::cout.flush();
 }

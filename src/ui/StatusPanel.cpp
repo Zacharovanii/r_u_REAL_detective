@@ -3,30 +3,31 @@
 #include "ui/FrameDrawer.h"
 #include <iostream>
 
-void StatusPanel::draw(const Model& model, int row, int col, int width) {
+StatusPanel::StatusPanel(Model& model) : model(model) {}
+
+void StatusPanel::draw(const PanelMetrics& pm) const {
     const auto& p = model.getPlayer();
 
-    int height = 10;
-    FrameDrawer::drawFrame(row, col, height, width);
+    FrameDrawer::drawFrame(pm.row, pm.col, pm.height, pm.width);
 
-    TerminalUtils::moveCursor(row + 1, col + 2);
+    TerminalUtils::moveCursor(pm.row + 1, pm.col + 2);
     std::cout << "Игрок";
 
-    TerminalUtils::moveCursor(row + 2, col + 2);
+    TerminalUtils::moveCursor(pm.row + 2, pm.col + 2);
     std::cout << "Позиция: (" << p.getX() << ", " << p.getY() << ")";
 
-    TerminalUtils::moveCursor(row + 3, col + 2);
+    TerminalUtils::moveCursor(pm.row + 3, pm.col + 2);
     std::cout << "HP: " << p.getHealth();
 
-    TerminalUtils::moveCursor(row + 4, col + 2);
+    TerminalUtils::moveCursor(pm.row + 4, pm.col + 2);
     std::cout << "Деньги: " << p.getMoney();
 
-    TerminalUtils::moveCursor(row + 5, col + 2);
+    TerminalUtils::moveCursor(pm.row + 5, pm.col + 2);
     std::cout << "Жетоны: " << p.getBadges();
 
-    TerminalUtils::moveCursor(row + 6, col + 2);
+    TerminalUtils::moveCursor(pm.row + 6, pm.col + 2);
     std::cout << "Флирт: " << p.getFlirt();
 
-    TerminalUtils::moveCursor(row + 7, col + 2);
+    TerminalUtils::moveCursor(pm.row + 7, pm.col + 2);
     std::cout << "Статус: " << p.getStatus();
 }

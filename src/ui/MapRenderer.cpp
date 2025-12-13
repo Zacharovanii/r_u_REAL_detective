@@ -1,77 +1,122 @@
 #include "ui/MapRenderer.h"
 #include "ui/TerminalUtils.h"
 #include "ui/FrameDrawer.h"
+#include "ui/styles/TextStyles.h"
 #include <iostream>
 
-static constexpr std::string_view colorOf(char tile) {
+static StyledText colorOf(char tile) {
+    StyledText s;
     switch (tile) {
         // Пол
-    case '.': return "\033[38;5;250m·\033[0m";        // Светлая точка пола
-    case ',': return "\033[38;5;34m░\033[0m";         // Трава
-    case '~': return "\033[38;5;39m≈\033[0m";         // Вода (не режет глаз)
-    case ' ': return "\033[48;5;236m \033[0m";        // Тёмная плитка
+    case '.':
+        s.setText("·");
+        s.setColor(Color::BrightBlack);
+        break;
+
+    case ',':
+        s.setText("░");
+        s.setColor(Color::Green);
+        break;
+
+    case '~':
+        s.setText("≈");
+        s.setColor(Color::Cyan);
+        break;
+
+    case ' ':
+        s.setText(" ");
+        s.setBackground(Background::BrightBlack);
+        break;
 
         // Стены
-    case '#': return "\033[38;5;245m█\033[0m";        // Стена каменная
-    case '%': return "\033[38;5;130m▓\033[0m";        // Кирпичи
-    case 'T': return "\033[38;5;28m♣\033[0m";         // Дерево
+    case '#':
+        s.setText("█");
+        s.setColor(Color::BrightBlack);
+        break;
+
+    case '%':
+        s.setText("▓");
+        s.setColor(Color::Red);
+        break;
+
+    case 'T':
+        s.setText("♣");
+        s.setColor(Color::Green);
+        break;
 
         // Персонажи
-    case '@': return "\033[1;32m@\033[0m";            // Игрок
-    case 'N': return "\033[1;36mN\033[0m";            // NPC
+    case '@':
+        s.setText("@");
+        s.setColor(Color::BrightGreen);
+        s.setStyle(Style::Bold);
+        break;
+
+    case 'N':
+        s.setText("N");
+        s.setColor(Color::BrightCyan);
+        s.setStyle(Style::Bold);
+        break;
 
         // Предметы
-    case 'I': return "\033[1;33m♦\033[0m";            // Предмет
-    case 'C': return "\033[38;5;214m□\033[0m";        // Сундук
-    case 'K': return "\033[1;33m⌑\033[0m";            // Ключ
-    case 'P': return "\033[1;35m○\033[0m";            // Зелье
+    case 'I':
+        s.setText("♦");
+        s.setColor(Color::BrightYellow);
+        s.setStyle(Style::Bold);
+        break;
 
         // Архитектура
-    case 'D': return "\033[38;5;166m╫\033[0m";        // Дверь
-    case 'S': return "\033[1;37m↑\033[0m";            // Лестница
-    case 'B': return "\033[38;5;97m╒╕\033[0m";         // Кровать
-    case 'F': return "\033[38;5;208m▲\033[0m";        // Факел
+    case 'D':
+        s.setText("╫");
+        s.setColor(Color::Yellow);
+        break;
+
+    case 'S':
+        s.setText("↑");
+        s.setColor(Color::BrightWhite);
+        s.setStyle(Style::Bold);
+        break;
 
         // Цветные зоны
-    case 'X': return "\033[48;5;88m \033[0m";
-    case 'O': return "\033[48;5;28m \033[0m";
-    case 'L': return "\033[48;5;27m \033[0m";
+    case 'X':
+        s.setText(" ");
+        s.setBackground(Background::Red);
+        break;
 
-        // Декор
-    case 'M': return "\033[38;5;248m╱\033[0m";         // Паутина легкая
+    case 'O':
+        s.setText(" ");
+        s.setBackground(Background::Green);
+        break;
 
-    default:  return "\033[38;5;196m?\033[0m";
+    case 'L':
+        s.setText(" ");
+        s.setBackground(Background::Blue);
+        break;
+
+    default:
+        s.setText(std::string(1, tile));
+        s.setColor(Color::BrightRed);
+        break;
     }
+    return s;
 }
-
 
 MapRenderer::MapRenderer(Model& model) : model(model) { }
 
-void MapRenderer::draw(int row, int col, int radiusY, int radiusX) const {
-    int height = radiusY * 2 + 1;
-    int width  = radiusX * 2 + 1;
-
-    PanelMetrics pm = {static_cast<size_t>(row), static_cast<size_t>(col), static_cast<size_t>(height + 2), static_cast<size_t>(width + 2)};
+void MapRenderer::draw(const PanelMetrics& pm, int radiusY, int radiusX) const {
     FrameDrawer::drawFrameWithTitle(pm, model.getCurrentLocationName());
-    drawAreaAroundPlayer(row + 1, col + 1, radiusY, radiusX);
+    drawAreaAroundPlayer(pm, radiusY, radiusX);
 }
 
-void MapRenderer::draw(int row, int col, int radius) const {
-    draw(row, col, radius, radius);
-}
-
-void MapRenderer::drawAreaAroundPlayer(int row, int col,
-                                      int radiusY, int radiusX) const {
+void MapRenderer::drawAreaAroundPlayer(const PanelMetrics& pm, int radiusY, int radiusX) const {
     for (int dy = -radiusY; dy <= radiusY; dy++) {
         for (int dx = -radiusX; dx <= radiusX; dx++) {
-            drawTile(row, col, radiusY, radiusX, dy, dx);
+            TerminalUtils::moveCursor(pm.row + (dy + radiusY) + 1, pm.col + (dx + radiusX) + 1);
+            drawTile(dy, dx);
         }
     }
 }
 
-void MapRenderer::drawTile(int row,     int col,
-                           int radiusY, int radiusX,
-                           int dy,      int dx) const {
+void MapRenderer::drawTile(int dy, int dx) const {
     Location* location = model.getCurrentLocation();
     if (!location) return;
 
@@ -81,8 +126,6 @@ void MapRenderer::drawTile(int row,     int col,
     int checkY = static_cast<int>(p.getY()) + dy;
     int checkX = static_cast<int>(p.getX()) + dx;
 
-    TerminalUtils::moveCursor(row + (dy + radiusY), col + (dx + radiusX));
-
     if (!isValidPosition(checkY, checkX)) {
         std::cout << " ";
         return;
@@ -91,22 +134,27 @@ void MapRenderer::drawTile(int row,     int col,
     auto y = static_cast<size_t>(checkY);
     auto x = static_cast<size_t>(checkX);
 
-    // Рисуем игрока
+    StyledText baseTile = colorOf(tiles[y][x]);
+
     if (y == p.getY() && x == p.getX()) {
-        std::cout << colorOf('@');
+        StyledText player = colorOf('@');
+
+        if (baseTile.background != Background::Default)
+            player.setBackground(baseTile.background);
+
+        std::cout << player.getStyledText();
         return;
     }
-
     if (auto* door = location->getDoorAt({x, y})) {
         if (door->isOpen()) {
-            std::cout << colorOf(tiles[y][x]);
+            std::cout << baseTile.getStyledText();
         } else {
-            std::cout << colorOf('#');
+            std::cout << colorOf('#').getStyledText();
         }
         return;
     }
 
-    std::cout << colorOf(tiles[y][x]);
+    std::cout << baseTile.getStyledText();
 }
 
 bool MapRenderer::isValidPosition(int y, int x) const {
