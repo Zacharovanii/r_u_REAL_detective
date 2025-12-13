@@ -23,7 +23,7 @@ void ActionPanel::drawDialogue(PanelMetrics pm) const {
     TerminalUtils::moveCursor(pm.row, pm.col);
     auto dialogue = model.getDialogueManager().getCurrentDialogue();
     auto node = dialogue->getCurrentNode();
-    StyledText title = {"Диалог с " + node->speaker(), Color::BrightYellow, Style::Blink};
+    StyledText title = {node->speaker(), Color::BrightYellow, Style::Blink};
     FrameDrawer::drawFrameWithTitle(pm, title);
 
     size_t s_row = pm.row + 1, s_col = pm.col + 2;

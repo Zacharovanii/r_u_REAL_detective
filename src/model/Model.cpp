@@ -79,3 +79,7 @@ void Model::interactWithNearby(size_t index) {
     Interactable* interactable = nearby_interactables[index];
     dialogue_manager.startDialogue(interactable->interact());
 }
+
+void Model::makeChoice(size_t index) {
+    dialogue_manager.makeChoice(index, player);
+}

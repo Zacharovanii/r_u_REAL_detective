@@ -3,9 +3,10 @@
 #include "ui/TerminalUtils.h"
 #include "helpers/Types.h"
 
-
-Controller::Controller(Model &m, View &v) :
-                        model(m), view(v)
+Controller::Controller(
+    Model &m, View &v
+):
+    model(m), view(v)
 {}
 
 void Controller::run() const {
@@ -15,24 +16,22 @@ void Controller::run() const {
 
     constexpr char ESC = '\033';
     char ch;
+    bool isInDialogue;
+    bool isChoice;
 
     do {
         ch = TerminalUtils::readChar();
-        bool isInDialogue = model.getDialogueManager().isInDialogue();
+        isInDialogue = model.isInDialogue();
+        isChoice = ch >= '1' && ch <= '9';
 
-
-        if (ch == ESC) {
+        if (ch == ESC)
             break;
-        } else if (isInDialogue) {
-            if (ch == 'q') model.getDialogueManager().endDialogue();
-            else if (auto choice = charToIndex(ch)) {
-                handleDialogueInput(choice.value());
-            }
-        } else if (auto choice = charToIndex(ch)) {
-            handleInteractionChoice(choice.value());
-        } else {
+        else if (isInDialogue && isChoice)
+            handleDialogueInput(charToIndex(ch));
+        else if (isChoice)
+            handleInteractionChoice(charToIndex(ch));
+        else
             handleExplorationInput(ch);
-        }
 
         if (ch) {
             model.update();
@@ -40,13 +39,11 @@ void Controller::run() const {
         }
     }
     while (ch != ESC);
-
     TerminalUtils::clearScreen();
 }
 
-std::optional<size_t> Controller::charToIndex(char ch) {
-    if (ch >= '1' && ch <= '9')  return static_cast<size_t>(ch - '1'); // преобразуем '1' в 0, '2' в 1 и т.д
-    return std::nullopt;
+size_t Controller::charToIndex(char ch) {
+    return static_cast<size_t>(ch - '1'); // преобразуем '1' в 0, '2' в 1 и т.д
 }
 
 void Controller::handleExplorationInput(char ch) const {
@@ -64,5 +61,5 @@ void Controller::handleInteractionChoice(size_t index) const {
 }
 
 void Controller::handleDialogueInput(size_t choice) const {
-    model.getDialogueManager().makeChoice(choice, const_cast<Player&>(model.getPlayer()));
+    model.makeChoice(choice);
 }

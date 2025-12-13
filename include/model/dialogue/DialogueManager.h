@@ -12,7 +12,6 @@ public:
     void registerDialogue(Dialogue&& dialogue);
     void startDialogue(const std::string& dialogue_id);
     bool makeChoice(size_t choice_index, Player& player);
-    void endDialogue();
 
     bool isInDialogue() const;
     Dialogue* getCurrentDialogue() const;

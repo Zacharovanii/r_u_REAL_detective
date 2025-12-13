@@ -7,8 +7,9 @@ void Dialogue::addNode(const DialogueNode& node) { nodes[node.id()] = node; }
 bool Dialogue::isActive() const { return !finished && !current_node_id.empty(); }
 
 DialogueNode* Dialogue::getCurrentNode() {
-    auto it = nodes.find(current_node_id);
-    return it != nodes.end() ? &it->second : nullptr;
+    if (nodes.contains(current_node_id)) {
+        return &nodes[current_node_id];
+    } else return nullptr;
 }
 void Dialogue::start(const std::string& start_node_id) {
     current_node_id = start_node_id;
@@ -38,6 +39,5 @@ bool Dialogue::makeChoice(size_t choice_index, Player& player) {
         end();
     else
         current_node_id = choice.next_node_id;
-
     return true;
 }

@@ -28,6 +28,4 @@ void StatusPanel::draw(const PanelMetrics& pm) const {
     TerminalUtils::moveCursor(pm.row + 6, pm.col + 2);
     std::cout << "Флирт: " << p.getFlirt();
 
-    TerminalUtils::moveCursor(pm.row + 7, pm.col + 2);
-    std::cout << "Статус: " << p.getStatus();
 }

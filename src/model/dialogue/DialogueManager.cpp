@@ -6,13 +6,11 @@ void DialogueManager::registerDialogue(Dialogue&& dialogue) {
 }
 
 void DialogueManager::startDialogue(const std::string& dialogue_id) {
-    auto it = dialogues.find(dialogue_id);
-    if (it != dialogues.end()) {
-        current_dialogue = &it->second;
+    if (dialogues.contains(dialogue_id)) {
+        current_dialogue = &dialogues[dialogue_id];
         current_dialogue->start("start");
     }
 }
-
 bool DialogueManager::makeChoice(size_t choice_index, Player& player) {
     if (!isInDialogue()) return false;
     bool result = current_dialogue->makeChoice(choice_index, player);
@@ -21,19 +19,10 @@ bool DialogueManager::makeChoice(size_t choice_index, Player& player) {
     }
     return result;
 }
-
-void DialogueManager::endDialogue() {
-    if (current_dialogue) {
-        current_dialogue->end();
-        current_dialogue = nullptr;
-    }
-}
-
 bool DialogueManager::isInDialogue() const {
     bool result = current_dialogue && current_dialogue->isActive();
     return result;
 }
-
 Dialogue* DialogueManager::getCurrentDialogue() const {
     return current_dialogue;
 }
