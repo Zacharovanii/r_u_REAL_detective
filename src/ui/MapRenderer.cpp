@@ -153,7 +153,6 @@ void MapRenderer::drawTile(int dy, int dx) const {
         }
         return;
     }
-
     std::cout << baseTile.getStyledText();
 }
 

@@ -4,7 +4,17 @@
 #include "helpers/TextWrapper.h"
 #include <iostream>
 
-ActionPanel::ActionPanel(Model& model) : model(model) {}
+ActionPanel::ActionPanel(Model& model) : model(model) {
+    StyledText action = StyledText();
+    action.setText("Действия:");
+    action.setColor(Color::Blue);
+    about[0] = action.getStyledText();
+    about[1] = "Подойдите к персонажу или предмету";
+    about[2] = "для начала взаимодействия";
+    about[3] = "Управление: WASD";
+    about[4] = "Выход: ESC";
+    about[5] = "(Ваш прогресс не сохраняется)";
+}
 
 void ActionPanel::draw(const PanelMetrics& pm) const {
     TerminalUtils::moveCursor(pm.row, pm.col);
@@ -19,7 +29,7 @@ void ActionPanel::draw(const PanelMetrics& pm) const {
     }
 }
 
-void ActionPanel::drawDialogue(PanelMetrics pm) const {
+void ActionPanel::drawDialogue(const PanelMetrics& pm) const {
     TerminalUtils::moveCursor(pm.row, pm.col);
     auto dialogue = model.getDialogueManager().getCurrentDialogue();
     auto node = dialogue->getCurrentNode();
@@ -43,7 +53,7 @@ void ActionPanel::drawDialogue(PanelMetrics pm) const {
     }
 }
 
-void ActionPanel::drawNearbyItems(PanelMetrics pm) const {
+void ActionPanel::drawNearbyItems(const PanelMetrics& pm) const {
     TerminalUtils::moveCursor(pm.row, pm.col);
     StyledText title = {"Выбор взаимодействия", Color::BrightCyan, Style::Blink};
     FrameDrawer::drawFrameWithTitle(pm, title);
@@ -60,7 +70,6 @@ void ActionPanel::drawNearbyItems(PanelMetrics pm) const {
         std::cout << i + 1 << ". " << items[i]->getName() << ": " << items[i]->getDescription() ;
     }
 }
-
 
 void ActionPanel::drawEmpty(const PanelMetrics& pm) const {
     TerminalUtils::moveCursor(pm.row, pm.col);

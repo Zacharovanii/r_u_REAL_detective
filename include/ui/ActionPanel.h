@@ -6,17 +6,10 @@
 class ActionPanel {
 private:
     Model& model;
-    std::string about[6] = {
-        TextStyles::styled("Действия:", Color::Blue),
-        "Подойдите к персонажу или предмету",
-        "для начала взаимодействия",
-        "Управление: WASD",
-        "Выход: ESC",
-        "(Ваш прогресс не сохраняется)"
-    };
+    std::string about[6];
 
-    void drawDialogue(PanelMetrics pm) const;
-    void drawNearbyItems(PanelMetrics pm) const;
+    void drawDialogue(const PanelMetrics& pm) const;
+    void drawNearbyItems(const PanelMetrics& pm) const;
     void drawEmpty(const PanelMetrics& pm) const;
 public:
     explicit ActionPanel(Model& model);

@@ -63,43 +63,14 @@ struct StyledText {
     Style style = Style::Reset;
     Background background = Background::Default;
 
-    std::string getText() const { return text; }
-    void setText(const std::string& newText) { text = newText; }
+    std::string getText() const;
+    void setText(const std::string& newText);
 
-    std::string getStyledText() const {
-        std::string result;
+    std::string getStyledText() const;
 
-        if (color != Color::Default)
-            result += "\033[" + std::to_string(static_cast<int>(color)) + "m";
-        if (background != Background::Default)
-            result += "\033[" + std::to_string(static_cast<int>(background)) + "m";
-        if (style != Style::Reset)
-            result += "\033[" + std::to_string(static_cast<int>(style)) + "m";
+    void setColor(Color newColor);
+    void setStyle(Style newStyle);
+    void setBackground(Background newBackground);
 
-        result += text + "\033[0m";
-        return result;
-    }
-    void setColor(Color newColor) { color = newColor; }
-    void setStyle(Style newStyle) { style = newStyle; }
-    void setBackground(Background newBackground) { background = newBackground; }
-
-    void resetStyles() {
-        color = Color::Default;
-        style = Style::Reset;
-        background = Background::Default;
-    }
+    void resetStyles();
 };
-
-namespace TextStyles {
-    std::string reset();
-    std::string color(Color c);
-    std::string background(Background bg);
-    std::string style(Style s);
-
-    std::string styled(const std::string& text, Color c);
-    std::string styled(const std::string& text, Background bg);
-    std::string styled(const std::string& text, Style s);
-    std::string styled(const std::string& text, Color c, Style s);
-    std::string styled(const std::string& text, Color c, Background bg);
-    std::string styled(const std::string& text, Color c, Background bg, Style s);
-}
