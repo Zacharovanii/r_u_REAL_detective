@@ -13,45 +13,46 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager, Player& 
     // ========================= ХОЗЯИН ОТЕЛЯ (Х) =========================
     Dialogue hotelOwner("hotel_owner");
     DialogueNode no_resources;
-    no_resources.id = "no_resources";
-    no_resources.speaker = "Хозяин отеля";
-    no_resources.text = "Вам не хватает необходимых ресурсов.";
-    no_resources.choices = { {"Назад", "start", "", "",nullptr} };
+    no_resources
+        .setID("no_resources")
+        ->setSpeaker("Хозяин отеля")
+        ->setText("Вам не хватает необходимых ресурсов.")
+        ->addChoice( {"Назад", "start"} );
 
     DialogueNode start;
     start.id = "start";
     start.speaker = "Хозяин отеля";
     start.text = "Я всю ночь простоял за барной стойкой...";
     start.choices = {
-        {"Показать жетон", "badge", "has_badge", "remove_badge", nullptr},
-        {"Дать деньги", "money", "has_money", "remove_money", nullptr},
-        {"Флиртовать", "flirt", "has_flirt", "remove_flirt", nullptr},
-        {"Применить силу", "force", "has_health", "take_damage", nullptr}
+        {"Показать жетон", "badge", "has_badge", "remove_badge"},
+        {"Дать деньги", "money", "has_money", "remove_money"},
+        {"Флиртовать", "flirt", "has_flirt", "remove_flirt"},
+        {"Применить силу", "force", "has_health", "take_damage"}
     };
 
     DialogueNode badge;
     badge.id = "badge";
     badge.speaker = "Хозяин отеля";
     badge.text = "Вы не просто полицейский, а ФБР? До свидания!";
-    badge.choices = { {"Уйти", "end", "", "", nullptr} };
+    badge.choices = { {"Уйти", "end"} };
 
     DialogueNode money;
     money.id = "money";
     money.speaker = "Хозяин отеля";
     money.text = "Слепец с собакой — мой второй подозреваемый.";
-    money.choices = { {"Уйти", "end", "", "", nullptr} };
+    money.choices = { {"Уйти", "end"} };
 
     DialogueNode flirt;
     flirt.id = "flirt";
     flirt.speaker = "Хозяин отеля";
     flirt.text = "Вот вам обед за счет заведения.";
-    flirt.choices = { {"Уйти", "end", "", "", nullptr} };
+    flirt.choices = { {"Уйти", "end"} };
 
     DialogueNode force;
     force.id = "force";
     force.speaker = "Хозяин отеля";
     force.text = "Вытирая кровь с губ...";
-    force.choices = { {"Уйти", "end", "", "", nullptr} };
+    force.choices = { {"Уйти", "end"} };
 
     hotelOwner.addNode(start);
     hotelOwner.addNode(badge);

@@ -12,18 +12,9 @@ private:
     std::vector<Door> doors;
     MapTiles tiles;
     std::string name;
-
 public:
     Location() = default;
     Location(MapTiles data, std::string name);
-
-    // Удаляем копирование (из-за unique_ptr)
-    Location(const Location&) = delete;
-    Location& operator=(const Location&) = delete;
-
-    // Разрешаем перемещение
-    Location(Location&&) = default;
-    Location& operator=(Location&&) = default;
 
     [[nodiscard]] const MapTiles& getTiles() const;
     [[nodiscard]] const std::string& getName() const;
