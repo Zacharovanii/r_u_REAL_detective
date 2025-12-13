@@ -10,9 +10,6 @@ private:
     std::string current_node_id;
     bool finished = false;
 
-    static void callEnterFor(const DialogueNode& node);
-    static void callEnterFor(const DialogueNode* node);
-
 public:
     Dialogue() = default;
     explicit Dialogue(std::string id);
