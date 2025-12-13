@@ -40,26 +40,41 @@ struct DialogueChoice {
     }
 };
 
-struct DialogueNode {
-    std::string id;
-    std::string speaker;
-    std::string text;
-    std::vector<DialogueChoice> choices;
+class DialogueNode {
+private:
+    std::string _id;
+    std::string _speaker;
+    std::string _text;
+    std::vector<DialogueChoice> _choices;
 
-    DialogueNode* setID(std::string value) {
-        this->id = std::move(value);
+public:
+    DialogueNode() = default;
+
+    [[nodiscard]] const std::string& id() const { return _id; }
+    [[nodiscard]] const std::string& speaker() const { return _speaker; }
+    [[nodiscard]] const std::string& text() const { return _text; }
+    [[nodiscard]] const std::vector<DialogueChoice>& choices() const { return _choices; }
+
+    DialogueNode* id(std::string value) {
+        this->_id = std::move(value);
         return this;
     }
-    DialogueNode* setSpeaker(std::string value) {
-        this->speaker = std::move(value);
+    DialogueNode* speaker(std::string value) {
+        this->_speaker = std::move(value);
         return this;
     }
-    DialogueNode* setText(std::string value) {
-        this->text = std::move(value);
+    DialogueNode* text(std::string value) {
+        this->_text = std::move(value);
         return this;
     }
-    DialogueNode* addChoice(DialogueChoice value) {
-        this->choices.push_back(std::move(value));
+    DialogueNode* choice(DialogueChoice value) {
+        this->_choices.push_back(std::move(value));
+        return this;
+    }
+    DialogueNode* choices(DialogueChoice values[], int values_count) {
+        for (auto i = 0; i < values_count; i++) {
+            this->_choices.push_back(std::move(values[i]));
+        }
         return this;
     }
 };

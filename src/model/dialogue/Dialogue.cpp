@@ -3,7 +3,7 @@
 
 Dialogue::Dialogue(std::string id) : dialogue_id(std::move(id)) {}
 
-void Dialogue::addNode(const DialogueNode& node) { nodes[node.id] = node; }
+void Dialogue::addNode(const DialogueNode& node) { nodes[node.id()] = node; }
 bool Dialogue::isActive() const { return !finished && !current_node_id.empty(); }
 
 DialogueNode* Dialogue::getCurrentNode() {
@@ -21,11 +21,11 @@ void Dialogue::end() {
 
 bool Dialogue::makeChoice(size_t choice_index, Player& player) {
     auto node = getCurrentNode();
-    if (!node || choice_index >= node->choices.size()) {
+    if (!node || choice_index >= node->choices().size()) {
         return false;
     }
 
-    auto& choice = node->choices[choice_index];
+    auto& choice = node->choices()[choice_index];
 
     if (choice.checkCondition(player))
         choice.runAction(player);

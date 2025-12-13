@@ -23,11 +23,11 @@ void ActionPanel::drawDialogue(PanelMetrics pm) const {
     TerminalUtils::moveCursor(pm.row, pm.col);
     auto dialogue = model.getDialogueManager().getCurrentDialogue();
     auto node = dialogue->getCurrentNode();
-    StyledText title = {"Диалог с " + node->speaker, Color::BrightYellow, Style::Blink};
+    StyledText title = {"Диалог с " + node->speaker(), Color::BrightYellow, Style::Blink};
     FrameDrawer::drawFrameWithTitle(pm, title);
 
     size_t s_row = pm.row + 1, s_col = pm.col + 2;
-    auto lines = TextWrapper::wrap(node->text, pm.width - 2);
+    auto lines = TextWrapper::wrap(node->text(), pm.width - 2);
     for (const auto& line : lines) {
         TerminalUtils::moveCursor(s_row, s_col);
         std::cout << line;
@@ -35,7 +35,7 @@ void ActionPanel::drawDialogue(PanelMetrics pm) const {
     }
     s_row++;
     s_col += 2;
-    auto items = node->choices;
+    auto items = node->choices();
     auto item_count = items.size();
     for (int i = 0; i < item_count; i++) {
         TerminalUtils::moveCursor(s_row + i, s_col);
