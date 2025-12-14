@@ -19,7 +19,7 @@ void Location::addInteractable(std::unique_ptr<Interactable> interactable) {
 
 Door* Location::getDoorAt(Position pos) {
     for (auto& door : doors) {
-        if (door.isIntersect(pos))
+        if (door.isTriggered(pos))
             return &door;
     }
     return nullptr;

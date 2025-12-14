@@ -9,6 +9,7 @@ public:
         std::string name,
         std::string description
         );
+    Triggerable(Position initial_pos);
 
     virtual void trigger(Player& player) = 0;
 };

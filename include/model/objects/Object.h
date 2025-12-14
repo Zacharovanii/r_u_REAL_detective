@@ -5,8 +5,8 @@
 class Object {
 protected:
     Position position;
-    std::string name;
-    std::string description;
+    std::string name = "";
+    std::string description = "";
 
 public:
     Object(
@@ -14,6 +14,8 @@ public:
         std::string name,
         std::string description
         );
+
+    Object(Position initial_pos);
     virtual ~Object() = default;
 
     [[nodiscard]] std::string getName() const;

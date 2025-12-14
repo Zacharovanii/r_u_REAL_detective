@@ -3,11 +3,10 @@
 #include "helpers/GameInitializer.h"
 #include "helpers/DialogueInitializer.h"
 
-Model::Model() : player(1, 1) {
-    GameInitializer::initGameWorld(game_map, dialogue_manager);
-    GameInitializer::loadStartLocation(game_map, player, "Park");
+Model::Model() : player(14, 11) {
+    GameInitializer::initGameWorld(game_map);
     DialogueInitializer::initializeDialogues(dialogue_manager, player);
-    player.setPositionAt(14, 11);
+    game_map.setCurrentLocation("Park");
 }
 
 const Player& Model::getPlayer() const { return player; }

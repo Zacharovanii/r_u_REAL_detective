@@ -4,10 +4,16 @@ Object::Object(
     Position initial_pos,
     std::string name,
     std::string description
-    ) :
+):
     position(initial_pos),
     name(std::move(name)),
     description(std::move(description))
+{}
+
+Object::Object(
+    Position initial_pos
+):
+    position(initial_pos)
 {}
 
 std::string Object::getName() const { return name; }

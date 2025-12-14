@@ -53,7 +53,6 @@ static StyledText colorOf(char tile) {
         s.setStyle(Style::Bold);
         break;
 
-        // Предметы
     case 'C':
         s.setText("♦");
         s.setColor(Color::HINT);
@@ -154,14 +153,6 @@ void MapRenderer::drawTile(int dy, int dx) const {
             player.setBackground(baseTile.background);
 
         std::cout << player.getStyledText();
-        return;
-    }
-    if (auto* door = location->getDoorAt({x, y})) {
-        if (door->isOpen()) {
-            std::cout << baseTile.getStyledText();
-        } else {
-            std::cout << colorOf('#').getStyledText();
-        }
         return;
     }
     std::cout << baseTile.getStyledText();
