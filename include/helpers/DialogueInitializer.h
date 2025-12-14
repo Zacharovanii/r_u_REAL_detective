@@ -4,5 +4,5 @@
 
 class DialogueInitializer {
 public:
-    static void initializeDialogues(DialogueManager& manager, Player& player);
+    static void initializeDialogues(DialogueManager& manager);
 };

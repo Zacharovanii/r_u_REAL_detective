@@ -11,13 +11,11 @@ private:
     std::vector<std::unique_ptr<Interactable>> interactables;
     std::vector<Door> doors;
     MapTiles tiles;
-    std::string name;
 public:
     Location() = default;
-    Location(MapTiles data, std::string name);
+    explicit Location(MapTiles data);
 
     [[nodiscard]] const MapTiles& getTiles() const;
-    [[nodiscard]] const std::string& getName() const;
 
     void addInteractable(std::unique_ptr<Interactable> interactable);
     void addDoor(const Door& newDoor);

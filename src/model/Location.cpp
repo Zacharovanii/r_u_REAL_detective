@@ -2,15 +2,12 @@
 #include <algorithm>
 
 Location::Location(
-    MapTiles data,
-    std::string name
+    MapTiles data
     ) :
-    tiles(std::move(data)),
-    name(std::move(name))
+    tiles(std::move(data))
 {}
 
 const MapTiles& Location::getTiles() const { return tiles; }
-const std::string& Location::getName() const { return name; }
 
 void Location::addDoor(const Door& newDoor) { doors.push_back(newDoor); }
 void Location::addInteractable(std::unique_ptr<Interactable> interactable) {
@@ -34,8 +31,11 @@ Interactable* Location::getInteractableAt(Position pos) const {
 }
 
 bool Location::canMoveTo(size_t x, size_t y) const {
-    if (y >= tiles.size() || x >= tiles[y].size() || tiles[y][x] == '#') {
-        // Вне карты или стена
+    if ( y >= tiles.size() || x >= tiles[y].size() ||
+        tiles[y][x] == '#' || tiles[y][x] == 'T' ||
+        tiles[y][x] == '%' || tiles[y][x] == '~' ||
+        tiles[y][x] == 'J' || tiles[y][x] == 'H'
+        ) {
         return false;
     }
     else {

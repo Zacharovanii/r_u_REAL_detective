@@ -9,18 +9,19 @@ static StyledText colorOf(char tile) {
     switch (tile) {
         // Пол
     case '.':
-        s.setText("·");
+        s.setText(" ");
         s.setColor(Color::BrightBlack);
         break;
 
     case ',':
         s.setText("░");
-        s.setColor(Color::Grass);
+        s.setColor(Color::BrightBlack);
         break;
 
     case '~':
         s.setText("≈");
-        s.setColor(Color::Cyan);
+        s.setColor(Color::Water);
+        s.setBackground(Background::Water);
         break;
 
         // Стены
@@ -47,10 +48,37 @@ static StyledText colorOf(char tile) {
         s.setStyle(Style::Bold);
         break;
 
-    case 'N':
-        s.setText("N");
-        s.setColor(Color::BrightCyan);
+    case 'z':
+        s.setText("S");
+        s.setColor(Color::BrightYellow);
         s.setStyle(Style::Bold);
+        break;
+    case 'Z':
+        s.setText("D");
+        s.setColor(Color::BrightYellow);
+        s.setStyle(Style::Bold);
+        s.setBackground(Background::Sand);
+        break;
+    case 'F':
+        s.setText("F");
+        s.setColor(Color::BrightYellow);
+        s.setStyle(Style::Bold);
+        break;
+    case 'X':
+        s.setText("X");
+        s.setColor(Color::BrightYellow);
+        s.setStyle(Style::Bold);
+        break;
+    case 'O':
+        s.setText("O");
+        s.setColor(Color::BrightYellow);
+        s.setStyle(Style::Bold);
+        break;
+    case 'B':
+        s.setText("B");
+        s.setColor(Color::BrightYellow);
+        s.setStyle(Style::Bold);
+        s.setBackground(Background::Road1);
         break;
 
     case 'C':
@@ -63,7 +91,7 @@ static StyledText colorOf(char tile) {
         // Архитектура
     case 'D':
         s.setText("╫");
-        s.setColor(Color::Red);
+        s.setColor(Color::Table);
         break;
 
     case 'w': // Лестница/выход наверх
@@ -73,11 +101,22 @@ static StyledText colorOf(char tile) {
         s.setBackground(Background::Sand);
         break;
 
+    case 'W': // Лестница/выход наверх
+        s.setText("↑");
+        s.setColor(Color::ARROW);
+        s.setStyle(Style::Bold);
+        break;
+
     case 's': // Лестница/выход вниз
         s.setText("↓");
         s.setColor(Color::ARROW);
         s.setStyle(Style::Bold);
         s.setBackground(Background::Sand);
+        break;
+    case 'S': // Лестница/выход вниз
+        s.setText("↓");
+        s.setColor(Color::ARROW);
+        s.setStyle(Style::Bold);
         break;
 
     case 'a': // Выход налево
@@ -100,6 +139,49 @@ static StyledText colorOf(char tile) {
         s.setColor(Color::Sand);
         s.setBackground(Background::Sand);
         break;
+    case 'r':
+        s.setText(" ");
+        s.setColor(Color::Red);
+        s.setBackground(Background::Red);
+        break;
+
+    case 'H':
+        s.setText("=");
+        s.setColor(Color::Table);
+        break;
+
+    case 'h':
+        s.setText("n");
+        s.setColor(Color::Chair);
+        break;
+    case 'J':
+        s.setText("║");
+        s.setColor(Color::Table);
+        break;
+    case '&':
+        s.setText("&");
+        s.setColor(Color::Person);
+        break;
+
+    case 'g':
+        s.setText("█");
+        s.setColor(Color::Road1);
+        s.setBackground(Background::Road1);
+        break;
+    case 'G':
+        s.setText("█");
+        s.setColor(Color::Road2);
+        s.setBackground(Background::Road2);
+        break;
+    case 'y':
+        s.setText("▓");
+        s.setColor(Color::Road1);
+        break;
+    case 'Y':
+        s.setText("▓");
+        s.setColor(Color::Road2);
+        break;
+
 
 
     default:

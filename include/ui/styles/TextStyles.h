@@ -11,8 +11,15 @@ enum class Color {
     Tree = 22,
     BrightTree = 100,
     HINT = 11,
+    Water = 27,
+    Table = 130,
+    Chair = 94,
+    Person = 60,
 
     Sand = 94,
+
+    Road1 = 244,
+    Road2 = 237,
 
     Blue = 4,
     Magenta = 5,
@@ -32,12 +39,19 @@ enum class Color {
 
 enum class Background {
     Black = 0,
+    Red = 1,
 
-    Grass = 64,          // фон-трава
-    Sand = static_cast<int>(Color::Sand),
+    Grass = 64,
+    Sand = 94,
+    Water = 18,
 
-    DarkGrass = 22,      // тёмная трава / лес
-    LightGrass = 70,     // светлая трава
+    Chair = 94,
+
+    Road1 = 244,
+    Road2 = 237,
+
+    DarkGrass = 22,
+    LightGrass = 70,
 
     BrightYellow = 11,
     Blue = 4,

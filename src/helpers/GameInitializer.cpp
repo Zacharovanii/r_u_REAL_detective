@@ -5,39 +5,82 @@
 #include "model/objects/NPC.h"
 
 void GameInitializer::initGameWorld(Map& map) {
-    Location hotel_1f(MapLoader::loadByName("hotel_1f"), "Hotel First Floor");
-    Location hotel_2f(MapLoader::loadByName("hotel_2f"), "Hotel Second Floor");
-    Location street(MapLoader::loadByName("street"), "Street");
-    Location park(MapLoader::loadByName("park"), "Park");
+    Location hotel_1f(MapLoader::loadByName("hotel_1f"));
+    Location hotel_2f(MapLoader::loadByName("hotel_2f"));
+    Location street(MapLoader::loadByName("street"));
+    Location park(MapLoader::loadByName("park"));
+    Location waterside(MapLoader::loadByName("waterside"));
+    Location bar(MapLoader::loadByName("bar"));
 
-    // Добавляем двери в локации
-    // Дверь с 1 этажа на 2 этаж
-    hotel_1f.addDoor(Door(
-        Position{28, 3},
-        "hotel_2f",
-        Position{23, 8}
-    ));
-
-    hotel_1f.addDoor(Door(
-        Position{35, 5},
-        "street",
-        Position{1, 1}
-    ));
-
+    // ================================PARK===================================
     park.addDoor(Door(
         Position{0, 6},
         "hotel_1f",
-        Position{1, 1},
+        Position{62, 7},
         {0, 8}
     ));
+    park.addDoor(Door(
+        Position{12, 0},
+        "Waterside",
+        Position{10, 6},
+        {16, 0}
+    ));
+    park.addDoor(Door(
+        Position{28, 6},
+        "Bar",
+        Position{1, 5},
+        Position{28, 8}
+    ));
+    park.addDoor(Door(
+        Position{12,14},
+        "Street",
+        Position{13, 1},
+        Position{16, 14}
+    ));
+    // =======================================================================
 
-        // ========================= ДОБАВЛЕНИЕ ВСЕХ ПОДОЗРЕВАЕМЫХ NPC =========================
-    int startX = 15;
-    int y = 7;
+    waterside.addDoor(Door(
+        Position{8, 7},
+        "Park",
+        Position{14, 1},
+        {12, 7}
+    ));
+    bar.addDoor(Door(
+        Position{0, 4},
+        "Park",
+        Position{27, 7},
+        Position{0, 6}
+    ));
+    hotel_1f.addDoor(Door(
+        Position{63, 6},
+        "Park",
+        Position{1, 7},
+        Position{63, 8}
+    ));
+    street.addDoor(Door(
+        Position{11, 0},
+        "Park",
+        Position{14, 13},
+        Position{15, 0}
+    ));
+
+    hotel_1f.addDoor(Door(
+        Position{30, 3},
+        "hotel_2f",
+        Position{30, 4}
+    ));
+
+    hotel_2f.addDoor(Door(
+       Position{30, 3},
+       "hotel_1f",
+       Position{30, 4}
+   ));
+
+    // ========================= ДОБАВЛЕНИЕ ВСЕХ ПОДОЗРЕВАЕМЫХ NPC =========================
 
     // Х — Хозяин отеля
     hotel_1f.addInteractable(std::make_unique<NPC>(
-        Position(startX + 0, y),
+        Position(14, 9),
         "Роберт",
         "Хозяин отеля",
         "Angry",
@@ -45,8 +88,8 @@ void GameInitializer::initGameWorld(Map& map) {
     ));
 
     // О — Охранник
-    hotel_1f.addInteractable(std::make_unique<NPC>(
-        Position(startX + 1, y),
+    bar.addInteractable(std::make_unique<NPC>(
+        Position(25, 9),
         "Виктор",
         "Охранник",
         "Aggressive",
@@ -54,8 +97,8 @@ void GameInitializer::initGameWorld(Map& map) {
     ));
 
     // С — Стриптизёрша
-    hotel_1f.addInteractable(std::make_unique<NPC>(
-        Position(startX + 2, y),
+    bar.addInteractable(std::make_unique<NPC>(
+        Position(40, 5),
         "Стеффани",
         "Стриптизёрша",
         "Flirty",
@@ -63,8 +106,8 @@ void GameInitializer::initGameWorld(Map& map) {
     ));
 
     // Д — Слепой дед
-    hotel_1f.addInteractable(std::make_unique<NPC>(
-        Position(startX + 3, y),
+    waterside.addInteractable(std::make_unique<NPC>(
+        Position(18 ,3),
         "Димон",
         "Слепой дед",
         "Suspicious",
@@ -72,8 +115,8 @@ void GameInitializer::initGameWorld(Map& map) {
     ));
 
     // П — Очкарик
-    hotel_1f.addInteractable(std::make_unique<NPC>(
-        Position(startX + 4, y),
+    hotel_2f.addInteractable(std::make_unique<NPC>(
+        Position(9, 5),
         "Френк",
         "Постоялец",
         "Nervous",
@@ -81,31 +124,18 @@ void GameInitializer::initGameWorld(Map& map) {
     ));
 
     // Б — Бабушка
-    hotel_1f.addInteractable(std::make_unique<NPC>(
-        Position(startX + 5, y),
+    street.addInteractable(std::make_unique<NPC>(
+        Position(37, 7),
         "Елизавета",
         "Бабушка",
         "Grumpy",
         "granny"
     ));
 
-
-    // Дверь со 2 этажа на 1 этаж
-    hotel_2f.addDoor(Door(
-        Position{23, 7},
-        "hotel_1f",
-        Position{28, 4}
-    ));
-
-
-    street.addDoor(Door(
-        Position{1, 3},
-        "hotel_1f",
-        Position{34, 5}
-    ));
-
     map.addLocation("hotel_1f", std::move(hotel_1f));
     map.addLocation("hotel_2f", std::move(hotel_2f));
-    map.addLocation("street", std::move(street));
+    map.addLocation("Street", std::move(street));
     map.addLocation("Park", std::move(park));
+    map.addLocation("Waterside", std::move(waterside));
+    map.addLocation("Bar", std::move(bar));
 }

@@ -5,7 +5,7 @@
 
 Model::Model() : player(14, 11) {
     GameInitializer::initGameWorld(game_map);
-    DialogueInitializer::initializeDialogues(dialogue_manager, player);
+    DialogueInitializer::initializeDialogues(dialogue_manager);
     game_map.setCurrentLocation("Park");
 }
 

@@ -3,16 +3,32 @@
 bool DialogueChoice::checkCondition(const Player& player) const {
     if      (condition_id == "has_badge") return player.getBadges() >= 1;
     else if (condition_id == "has_money") return player.getMoney() >= 1;
+    else if (condition_id == "has_money_2") return player.getMoney() >= 2;
     else if (condition_id == "has_flirt") return player.getFlirt() >= 1;
-    else if (condition_id == "has_health") return player.getHealth() > 0;
+    else if (condition_id == "has_health") return player.getHealth() >= 1;
+    else if (condition_id == "has_flirt_hp") return player.getFlirt() >= 1 && player.getHealth() >= 1;
+    else if (condition_id == "has_health_2") return player.getMoney() >= 2;
     else return true;
 }
 
 void DialogueChoice::runAction(Player& player) const {
     if      (action_id == "remove_badge") player.changeBadges(-1);
     else if (action_id == "remove_money") player.changeMoney(-1);
+    else if (action_id == "remove_money_2") player.changeMoney(-2);
     else if (action_id == "remove_flirt") player.changeFlirt(-1);
-    else if (action_id == "take_damage") player.changeHealth(-1);
+    else if (action_id == "remove_flirt_plus_hp") {
+        player.changeFlirt(-1);
+        player.changeHealth(+1);
+    } else if (action_id == "take_damage") player.changeHealth(-1);
+    else if (action_id == "take_damage_2") player.changeHealth(-2);
+    else if (action_id == "remove_flirt_double") {
+        player.changeFlirt(-1);
+        player.changeHealth(-1);
+    }
+    else if (action_id == "remove_flirt_plus_money") {
+        player.changeFlirt(-1);
+        player.changeMoney(+1);
+    }
     else if (action_id == "heal") player.changeHealth(+1);
     else return;
 }
