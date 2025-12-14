@@ -2,26 +2,52 @@
 #include <string>
 
 enum class Color {
-    Black = 30,
-    Red = 31,
-    Green = 32,
-    Yellow = 33,
-    Blue = 34,
-    Magenta = 35,
-    Cyan = 36,
-    White = 37,
+    Black = 0,
+    Red = 1,
 
-    BrightBlack = 90,
-    BrightRed = 91,
-    BrightGreen = 92,
-    BrightYellow = 93,
-    BrightBlue = 94,
-    BrightMagenta = 95,
-    BrightCyan = 96,
-    BrightWhite = 97,
+    ARROW = 14,
+    Detective = 213,
+    Grass = 64,
+    Tree = 22,
+    BrightTree = 100,
+    HINT = 11,
 
-    Default = 39
+    Sand = 94,
+
+    Blue = 4,
+    Magenta = 5,
+    Cyan = 6,
+    White = 7,
+
+    BrightYellow = 11,
+    BrightBlack = 8,
+    BrightRed = 9,
+    BrightBlue = 12,
+    BrightMagenta = 13,
+    BrightCyan = 14,
+    BrightWhite = 15,
+
+    Default = 256
 };
+
+enum class Background {
+    Black = 0,
+
+    Grass = 64,          // фон-трава
+    Sand = static_cast<int>(Color::Sand),
+
+    DarkGrass = 22,      // тёмная трава / лес
+    LightGrass = 70,     // светлая трава
+
+    BrightYellow = 11,
+    Blue = 4,
+    Magenta = 5,
+    Cyan = 6,
+    White = 7,
+
+    Default = 256
+};
+
 
 enum class Style {
     Reset = 0,
@@ -33,28 +59,6 @@ enum class Style {
     Reverse = 7,
     Hidden = 8,
     Strikethrough = 9
-};
-
-enum class Background {
-    Black = 40,
-    Red = 41,
-    Green = 42,
-    Yellow = 43,
-    Blue = 44,
-    Magenta = 45,
-    Cyan = 46,
-    White = 47,
-
-    BrightBlack = 100,
-    BrightRed = 101,
-    BrightGreen = 102,
-    BrightYellow = 103,
-    BrightBlue = 104,
-    BrightMagenta = 105,
-    BrightCyan = 106,
-    BrightWhite = 107,
-
-    Default = 49
 };
 
 struct StyledText {
@@ -73,4 +77,6 @@ struct StyledText {
     void setBackground(Background newBackground);
 
     void resetStyles();
+private:
+    void append(std::string& result, std::string& value);
 };

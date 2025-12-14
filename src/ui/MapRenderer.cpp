@@ -15,17 +15,12 @@ static StyledText colorOf(char tile) {
 
     case ',':
         s.setText("░");
-        s.setColor(Color::Green);
+        s.setColor(Color::Grass);
         break;
 
     case '~':
         s.setText("≈");
         s.setColor(Color::Cyan);
-        break;
-
-    case ' ':
-        s.setText(" ");
-        s.setBackground(Background::BrightBlack);
         break;
 
         // Стены
@@ -41,13 +36,14 @@ static StyledText colorOf(char tile) {
 
     case 'T':
         s.setText("♣");
-        s.setColor(Color::Green);
+        s.setColor(Color::BrightTree);
+        s.setBackground(Background::DarkGrass);
         break;
 
         // Персонажи
     case '@':
         s.setText("@");
-        s.setColor(Color::BrightGreen);
+        s.setColor(Color::Detective);
         s.setStyle(Style::Bold);
         break;
 
@@ -58,39 +54,54 @@ static StyledText colorOf(char tile) {
         break;
 
         // Предметы
-    case 'I':
+    case 'C':
         s.setText("♦");
-        s.setColor(Color::BrightYellow);
+        s.setColor(Color::HINT);
         s.setStyle(Style::Bold);
+        s.setBackground(Background::Sand);
         break;
 
         // Архитектура
     case 'D':
         s.setText("╫");
-        s.setColor(Color::Yellow);
+        s.setColor(Color::Red);
         break;
 
-    case 'S':
+    case 'w': // Лестница/выход наверх
         s.setText("↑");
-        s.setColor(Color::BrightWhite);
+        s.setColor(Color::ARROW);
         s.setStyle(Style::Bold);
+        s.setBackground(Background::Sand);
+        break;
+
+    case 's': // Лестница/выход вниз
+        s.setText("↓");
+        s.setColor(Color::ARROW);
+        s.setStyle(Style::Bold);
+        s.setBackground(Background::Sand);
+        break;
+
+    case 'a': // Выход налево
+        s.setText("←");
+        s.setColor(Color::ARROW);
+        s.setStyle(Style::Bold);
+        s.setBackground(Background::Sand);
+        break;
+
+    case 'd': // Выход направо
+        s.setText("→");
+        s.setColor(Color::ARROW);
+        s.setStyle(Style::Bold);
+        s.setBackground(Background::Sand);
         break;
 
         // Цветные зоны
-    case 'X':
-        s.setText(" ");
-        s.setBackground(Background::Red);
+    case 'x':
+        s.setText("█");
+        s.setColor(Color::Sand);
+        s.setBackground(Background::Sand);
         break;
 
-    case 'O':
-        s.setText(" ");
-        s.setBackground(Background::Green);
-        break;
-
-    case 'L':
-        s.setText(" ");
-        s.setBackground(Background::Blue);
-        break;
 
     default:
         s.setText(std::string(1, tile));

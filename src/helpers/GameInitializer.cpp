@@ -9,6 +9,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
     Location hotel_1f(MapLoader::loadByName("hotel_1f"), "Hotel First Floor");
     Location hotel_2f(MapLoader::loadByName("hotel_2f"), "Hotel Second Floor");
     Location street(MapLoader::loadByName("street"), "Street");
+    Location park(MapLoader::loadByName("park"), "Park");
 
     // Добавляем двери в локации
     // Дверь с 1 этажа на 2 этаж
@@ -113,6 +114,7 @@ void GameInitializer::initGameWorld(Map& map, DialogueManager& dialogue_manager)
     map.addLocation("hotel_1f", std::move(hotel_1f));
     map.addLocation("hotel_2f", std::move(hotel_2f));
     map.addLocation("street", std::move(street));
+    map.addLocation("Park", std::move(park));
 }
 
 std::string GameInitializer::loadStartLocation(Map& map, Player& player, const std::string& initial_location_name) {
