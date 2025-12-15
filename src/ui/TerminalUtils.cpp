@@ -82,7 +82,10 @@ char TerminalUtils::readChar() {
     return _getwch();
 #else
     char ch;
-    read(STDIN_FILENO, &ch, 1);
-    return ch;
+    ssize_t bytes_read = read(STDIN_FILENO, &ch, 1);
+    if (bytes_read == -1 || bytes_read == 0)
+        return '\0';
+    else return ch;
+
 #endif
 }
