@@ -31,8 +31,7 @@ void Controller::run() const {
             break;
         else if (isInDialogue && isChoice) {
             handleDialogueInput(charToIndex(ch));
-            if (State::needRestart()) break;
-            else if (State::needQuit()) break;
+            if (State::needRestart() || State::needQuit()) break;
         }
         else if (isChoice)
             handleInteractionChoice(charToIndex(ch));

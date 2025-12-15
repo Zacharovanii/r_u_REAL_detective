@@ -87,6 +87,11 @@ static StyledText colorOf(char tile) {
         s.setStyle(Style::Bold);
         s.setBackground(Background::Sand);
         break;
+    case 'c':
+        s.setText("♦");
+        s.setColor(Color::HINT);
+        s.setStyle(Style::Bold);
+        break;
 
         // Архитектура
     case 'D':

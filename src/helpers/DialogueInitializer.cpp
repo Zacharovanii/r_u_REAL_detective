@@ -72,64 +72,71 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
     DialogueNode crime1;
     crime1
         .id("crime")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("Поп-идол убит ночью ударом тупого продолговатого предмета по голове.")
         ->choice({"Далее", "crime2"});
 
     DialogueNode crime2;
     crime2
         .id("crime2")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("Ваши подозреваемые:")
         ->choice({"Далее", "crime3"});
 
     DialogueNode crime3;
     crime3
         .id("crime3")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("Х - хозяин отеля, он же бармен в баре при отеле")
         ->choice({"Далее", "crime4"});
 
     DialogueNode crime4;
     crime4
         .id("crime4")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("О - охранник")
         ->choice({"Далее", "crime5"});
 
     DialogueNode crime5;
     crime5
         .id("crime5")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("S - стриптизёрша в баре, девушка лёгкого поведения")
         ->choice({"Далее", "crime6"});
 
     DialogueNode crime6;
     crime6
         .id("crime6")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("D - слепой дед с собакой-поводырём, скандальный, жил напротив убитого")
         ->choice({"Далее", "crime7"});
 
     DialogueNode crime7;
     crime7
         .id("crime7")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("F - постоялец средних лет, тихий, в очках, сосед убитого слева")
         ->choice({"Далее", "crime8"});
 
     DialogueNode crime8;
     crime8
         .id("crime8")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("B - бабулька с костылем, соседка убитого справа")
         ->choice({"Далее", "crime9"});
 
     DialogueNode crime9;
     crime9
         .id("crime9")
-        ->speaker("Система")
+        ->speaker("Информация")
         ->text("Беседу с каждым из них Вы уже начали с вопросов 'Что Вы делали в момент убийства?' и 'Кого Вы подозреваете?'")
+        ->choice({"Далее", "crime10"});
+
+    DialogueNode crime10;
+    crime10
+        .id("crime10")
+        ->speaker("Готовы???")
+        ->text("Когда будете готовы - вернитесь на место преступления (номер поп-идола на втором этаже отеля)")
         ->choice({"Начать расследование", "end"});
 
     prologue.addNode(prologue1);
@@ -149,9 +156,7 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
     prologue.addNode(crime7);
     prologue.addNode(crime8);
     prologue.addNode(crime9);
-
-    manager.registerDialogue(std::move(prologue));
-
+    prologue.addNode(crime10);
 
     // ========================= ХОЗЯИН ОТЕЛЯ (Х) =========================
     Dialogue hotelOwner("hotel_owner");
@@ -229,12 +234,6 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
         ->text("Я не продаюсь, понял? Засунь себе эти деньги знаешь куда?")
         ->choice({"Уйти", "end"});
 
-    // DialogueNode o_flirt;
-    // o_flirt
-    //     .id("flirt")
-    //     ->speaker("Охранник")
-    //     ->text("Ты на что намекаешь, грязный извращенец?! На, получай! *Вы получили телесные повреждения, не совместимые с жизнью*")
-    //     ->choice({"Уйти", "end"});
     ending.text("Ты на что намекаешь, грязный извращенец?! На, получай! *Вы получили телесные повреждения, не совместимые с жизнью*");
 
     DialogueNode o_force;
@@ -409,7 +408,7 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
         ->choice({"Показать жетон", "badge", "has_badge", "remove_badge"})
         ->choice({"Дать деньги", "money", "has_money", "remove_money"})
         ->choice({"Флиртовать", "flirt", "has_flirt", "remove_flirt_plus_money"}) // -1 флирт, +1 деньги
-        ->choice({"Применить силу", "force", "has_health", ""}); // КОНЦОВКА
+        ->choice({"Применить силу", "ending", "has_health", ""}); // КОНЦОВКА
 
     DialogueNode b_badge;
     b_badge
@@ -432,20 +431,49 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
         ->text("Ох, уважил бабушку, милок! Порадовал на старость лет! Вот денюжка тебе за это от меня, возьми! А подозреваю я охранника. Ходит злой, дубинкой своей машет, почти каждый день приходил с поп-идолом этим ругаться! Мог и убить невзначай, сил-то у него немеряно!")
         ->choice({"Уйти", "end"});
 
-    DialogueNode b_force;
-    b_force
-        .id("force")
-        ->speaker("Бабушка")
-        ->text("*Вы не рассчитали удар, старушка упала и умерла. Вы арестованы и будете осуждены за убийство*")
-        ->choice({"Уйти", "end"});
+    ending.text("*Вы не рассчитали удар, старушка упала и умерла. Вы арестованы и будете осуждены за убийство*");
 
     granny.addNode(b_start);
     granny.addNode(b_badge);
     granny.addNode(b_money);
     granny.addNode(b_flirt);
-    granny.addNode(b_force);
+    granny.addNode(ending);
     granny.addNode(no_resources);
     granny.addNode(end);
+
+    // ========================= ФИНАЛЬНОЕ РЕШЕНИЕ ====================
+    Dialogue final("final_choice");
+    DialogueNode final1;
+    final1
+        .id("start")
+        ->speaker("Финальное решение")
+        ->text("Настало время финального решения, думайте чательно, детектив...")
+        ->choice({"Роберт: Хозяин отеля", "false"})
+        ->choice({"Стефанни: Стриптизёрша", "false"})
+        ->choice({"Виктор: Охранник", "false"})
+        ->choice({"Френк: Постоялец", "true"})
+        ->choice({"Димон: Слепой дед", "false"})
+        ->choice({"Елизавета: Бабулька", "false"})
+        ->choice({"Я не готов", "end" })
+    ;
+    DialogueNode f;
+    f
+        .id("false")
+        ->speaker("Вы ошиблись")
+        ->text("К большому сожелению вы сделали неверный вывод, когда это вскрылось общественность обозлилась на Вас, в итоге вы потеряли работу, а люди, узнающие вас на улице, смотрят на вас с презрением")
+        ->choice({ "Попробовать снова", "end", "", "restart" } )
+        ->choice({"Уйти с позором", "end", "", "quit" } );
+    DialogueNode t;
+    t
+        .id("true")
+        ->speaker("ПОБЕДА!!!")
+        ->text("К великому счастью вы оказались правы, все многочисленные фанаты поп-идола благодарный вам за восторжествовавшую справедливость, за такой успех вы получили значительной повышение в должности, а люди, узнающие вас на улице, иногда подходят фоткаться")
+        ->choice({"Поздравляем Вас победой (Команда: Супернатуралы)", "end", "", "quit" } );
+
+    final.addNode(final1);
+    final.addNode(f);
+    final.addNode(t);
+    final.addNode(end);
 
     // ========================= УЖЕ ГОВОРИЛИ =========================
     Dialogue alreadyTalked("already_talked");
@@ -459,6 +487,7 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
     alreadyTalked.addNode(end);
 
     // Регистрация всех диалогов
+    manager.registerDialogue(std::move(prologue));
     manager.registerDialogue(std::move(hotelOwner));
     manager.registerDialogue(std::move(guard));
     manager.registerDialogue(std::move(stripper));
@@ -466,4 +495,5 @@ void DialogueInitializer::initializeDialogues(DialogueManager& manager) {
     manager.registerDialogue(std::move(fan));
     manager.registerDialogue(std::move(granny));
     manager.registerDialogue(std::move(alreadyTalked));
+    manager.registerDialogue(std::move(final));
 }

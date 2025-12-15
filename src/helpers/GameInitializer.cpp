@@ -3,6 +3,7 @@
 #include "model/Location.h"
 #include "model/objects/Door.h"
 #include "model/objects/NPC.h"
+#include "model/objects/Item.h"
 
 void GameInitializer::initGameWorld(Map& map)
 {
@@ -39,11 +40,10 @@ void GameInitializer::initGameWorld(Map& map)
         Position{16, 14}
     ));
 
-    park.addInteractable(std::make_unique<NPC>(
+    park.addInteractable(std::make_unique<Item>(
         Position{14, 7},
         "Предысловие",
         "Рекомендуется к прочтению",
-        "",
         "prologue"
     ));
     // =======================================================================
@@ -130,6 +130,13 @@ void GameInitializer::initGameWorld(Map& map)
         "Постоялец",
         "Nervous",
         "fan"
+    ));
+
+    hotel_2f.addInteractable(std::make_unique<Item>(
+        Position(23, 9),
+        "Место убийства",
+        "Делайте финальный выбор только, когда будете готовы",
+        "final_choice"
     ));
 
     // Б — Бабушка
