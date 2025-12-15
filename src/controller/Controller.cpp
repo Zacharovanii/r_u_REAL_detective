@@ -2,12 +2,15 @@
 #include "controller/Controller.h"
 #include "ui/TerminalUtils.h"
 #include "helpers/Types.h"
+#include "model/GameState.h"
 
 Controller::Controller(
     Model &m, View &v
 ):
     model(m), view(v)
-{}
+{
+    State::reset();
+}
 
 void Controller::run() const {
     TerminalGuard guard;
@@ -26,8 +29,11 @@ void Controller::run() const {
 
         if (ch == ESC)
             break;
-        else if (isInDialogue && isChoice)
+        else if (isInDialogue && isChoice) {
             handleDialogueInput(charToIndex(ch));
+            if (State::needRestart()) break;
+            else if (State::needQuit()) break;
+        }
         else if (isChoice)
             handleInteractionChoice(charToIndex(ch));
         else

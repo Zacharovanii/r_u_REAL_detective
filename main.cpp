@@ -1,12 +1,16 @@
 #include "model/Model.h"
 #include "view/View.h"
 #include "controller/Controller.h"
+#include "model/GameState.h"
 
 int main() {
-    Model model;
-    View view(model);
-    Controller controller(model, view);
+    do {
+        Model model;
+        View view(model);
+        Controller controller(model, view);
 
-    controller.run();
+        controller.run();
+    } while (State::needRestart());
+
     return 0;
 }

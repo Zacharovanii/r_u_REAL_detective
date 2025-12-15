@@ -1,4 +1,5 @@
 #include "model/dialogue/DialogueNode.h"
+#include "model/GameState.h"
 
 bool DialogueChoice::checkCondition(const Player& player) const {
     if      (condition_id == "has_badge") return player.getBadges() >= 1;
@@ -30,6 +31,8 @@ void DialogueChoice::runAction(Player& player) const {
         player.changeMoney(+1);
     }
     else if (action_id == "heal") player.changeHealth(+1);
+    else if (action_id == "restart") State::requestRestart();
+    else if (action_id == "quit") State::requestQuit();
     else return;
 }
 

@@ -4,7 +4,8 @@
 #include "model/objects/Door.h"
 #include "model/objects/NPC.h"
 
-void GameInitializer::initGameWorld(Map& map) {
+void GameInitializer::initGameWorld(Map& map)
+{
     Location hotel_1f(MapLoader::loadByName("hotel_1f"));
     Location hotel_2f(MapLoader::loadByName("hotel_2f"));
     Location street(MapLoader::loadByName("street"));
@@ -36,6 +37,14 @@ void GameInitializer::initGameWorld(Map& map) {
         "Street",
         Position{13, 1},
         Position{16, 14}
+    ));
+
+    park.addInteractable(std::make_unique<NPC>(
+        Position{14, 7},
+        "Предысловие",
+        "Рекомендуется к прочтению",
+        "",
+        "prologue"
     ));
     // =======================================================================
 
